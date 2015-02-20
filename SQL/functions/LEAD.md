@@ -4,51 +4,74 @@ Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/fun
 
 LEAD is a way to access another row of the table you are querying without actually performing a self join.
 
-Imagine the use case you want to a report on employees, and for each employee you list, you also want to know the most previous hire.
+Imagine the use case you want to do a report on employees, and for each employee you list, you also want to know the employee with the next highest salary.
 
 Without the use of `LEAD` you could do something like:
 
 ```sql
-with emp_and_prev as (
-  select
-      emp1.first_name
-    , emp1.last_name
-    , emp1.hire_date
-    , emp2.first_name prev_first_name
-    , emp2.last_name prev_last_name
-    , emp2.hire_date prev_hire_date
-    , row_number() over (partition by emp1.employee_id order by emp2.hire_date desc) prev_hire_ranked
-  from
-      employees emp1
-    , employees emp2
-  where
-      emp2.hire_date < emp1.hire_date
+with emps as (
+    select 1 ID, 'John' first, 'Smith' last, 3300 sal from dual union all
+    select 2 ID,'Peter' first, 'Rogers' last, 9000 sal from dual union all
+    select 3 ID,'Deb' first, 'Harrison' last, 5500 sal from dual union all
+    select 4 ID,'Slade' first, 'Wilson' last, 343 sal from dual union all
+    select 5 ID,'Martha' first, 'Stewart' last, 1100 sal from dual
+),
+emp_sal_ranked as (
+    select
+        emp1.first
+      , emp1.last
+      , emp1.sal
+      , emp2.first next_first
+      , emp2.last next_last
+      , emp2.sal next_sal
+      , row_number() over (partition by emp1.ID order by emp2.sal) next_sal_ranked
+    from emps emp1, emps emp2
+    where emp2.sal (+) > emp1.sal
 )
+select first, last, sal, next_first, next_last, next_Sal
+from emp_sal_ranked
+where next_sal_ranked = 1
+order by sal
+```
 
-select
-    first_name
-  , last_name
-  , hire_date
-  , prev_first_name
-  , prev_last_name
-  , prev_hire_date
-from emp_and_prev
-where prev_hire_ranked = 1
+```
+FIRST  LAST            SAL NEXT_FIRST NEXT_LAST   NEXT_SAL
+------ -------- ---------- ---------- --------- ----------
+Slade  Wilson          343 Martha     Stewart         1100
+Martha Stewart        1100 John       Smith           3300
+John   Smith          3300 Deb        Harrison        5500
+Deb    Harrison       5500 Peter      Rogers          9000
+Peter  Rogers         9000
 ```
 
 Now we can avoid that self join like so:
 
 ```sql
+with emps as (
+    select 1 ID, 'John' first, 'Smith' last, 3300 sal from dual union all
+    select 2 ID,'Peter' first, 'Rogers' last, 9000 sal from dual union all
+    select 3 ID,'Deb' first, 'Harrison' last, 5500 sal from dual union all
+    select 4 ID,'Slade' first, 'Wilson' last, 343 sal from dual union all
+    select 5 ID,'Martha' first, 'Steward' last, 1100 sal from dual
+)
 select
-    first_name
-  , last_name
-  , hire_date
-  , lead(first_name) over (order by hire_Date desc) prev_first_name
-  , lead(last_name) over (order by hire_Date desc) prev_last_name
-  , lead(hire_date) over (order by hire_Date desc) prev_hire_date
-from employees
+    first
+  , last
+  , sal
+  , lead(first) over (order by sal) next_first
+  , lead(last) over (order by sal) next_last
+  , lead(sal) over (order by sal) next_sal
+from emps
 ```
-
+```
+FIRST  LAST            SAL NEXT_FIRST NEXT_LAST   NEXT_SAL
+------ -------- ---------- ---------- --------- ----------
+Slade  Wilson          343 Martha     Steward         1100
+Martha Steward        1100 John       Smith           3300
+John   Smith          3300 Deb        Harrison        5500
+Deb    Harrison       5500 Peter      Rogers          9000
+Peter  Rogers         9000
+```
 Producing a lot cleaner query.
 
 In the above example, I just passed in one parameter to the lead function, but it accepts:
@@ -58,3 +81,33 @@ In the above example, I just passed in one parameter to the lead function, but i
 * Default - what to return in the case of NULL
 
 You can also respect (default) or ignore NULLs in the test with the syntax: `lead(column IGNORE NULLS)` or `lead(column) IGNORE NULLS`.
+
+Because we are just ordering by sal in the lead call, if two rows have the same sal, it won't get the next highest as my first example does, but the next row in the result set. E.g:
+
+```sql
+with emps as (
+    select 1 ID, 'John' first, 'Smith' last, 3300 sal from dual union all
+    select 2 ID,'Peter' first, 'Rogers' last, 9000 sal from dual union all
+    select 3 ID,'Deb' first, 'Harrison' last, 5500 sal from dual union all
+    select 4 ID,'Slade' first, 'Wilson' last, 343 sal from dual union all
+    select 5 ID,'Martha' first, 'Steward' last, 1100 sal from dual
+)
+select
+    first
+  , last
+  , sal
+  , lead(first) over (order by sal) next_first
+  , lead(last) over (order by sal) next_last
+  , lead(sal) over (order by sal) next_sal
+from emps
+```
+```
+FIRST  LAST            SAL NEXT_FIRST NEXT_LAST   NEXT_SAL
+------ -------- ---------- ---------- --------- ----------
+Slade  Wilson          343 Martha     Steward         1100
+Martha Steward        1100 John       Smith           3300
+John   Smith          3300 Bruce      Wayne           3300
+Bruce  Wayne          3300 Deb        Harrison        5500
+Deb    Harrison       5500 Peter      Rogers          9000
+Peter  Rogers         9000
+```
