@@ -90,7 +90,8 @@ with emps as (
     select 2 ID,'Peter' first, 'Rogers' last, 9000 sal from dual union all
     select 3 ID,'Deb' first, 'Harrison' last, 5500 sal from dual union all
     select 4 ID,'Slade' first, 'Wilson' last, 343 sal from dual union all
-    select 5 ID,'Martha' first, 'Steward' last, 1100 sal from dual
+    select 5 ID,'Martha' first, 'Steward' last, 1100 sal from dual union all
+    select 6 ID, 'Bruce' first, 'Wayne' last, 3300 sal from dual
 )
 select
     first
@@ -111,3 +112,5 @@ Bruce  Wayne          3300 Deb        Harrison        5500
 Deb    Harrison       5500 Peter      Rogers          9000
 Peter  Rogers         9000
 ```
+
+You may also be interested in the [LAG](LAG.md) function which has the reverse effect of getting the previous row.
