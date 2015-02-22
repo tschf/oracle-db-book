@@ -12,7 +12,7 @@ There are five variants of this function:
 
 ```sql
 create table char_width(
-    test_char varchar2(2 CHAR)
+    test_char varchar2(1 CHAR)
 );
 /
 
