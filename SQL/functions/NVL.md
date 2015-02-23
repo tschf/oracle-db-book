@@ -16,4 +16,4 @@ from dual
          1
 ```
 
-You may also be interested in the [NVL2](NVL2.md) function which has the reverse effect of getting the previous row.
+You may also be interested in the [NVL2](NVL2.md) function(s).
