@@ -1,6 +1,6 @@
 # BITAND
 
-`bitand` ANDs the binary values of two inputs. It expects the input to be in base 10, then ANDs the two numbers together.
+`bitand` ANDs the binary values of two inputs. It expects the inputs to be in base 10.
 
 If we wanted to AND 10 and 15 together we would be ANDing the values:
 
@@ -20,5 +20,5 @@ Output:
 ```
 TEN_FIFTEEN
 -----------
-         10 
+         10
 ```
