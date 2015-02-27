@@ -237,7 +237,6 @@ select
     department_id,
     loc
 from employees
---where department_id is not null
 model
     return updated rows
     reference depts on (select department_id, location_id from departments)
@@ -246,7 +245,6 @@ model
     main emps
         dimension by (employee_id, hire_date)
         measures (first_name, salary, department_id, 0 loc)
-        --IGNORE NAV
         rules (
 
             loc[employee_id >= 200, any] = depts.location_id[department_id[cv(employee_id),cv(hire_date)]]
@@ -271,11 +269,95 @@ EMPLOYEE_ID FIRST_NAME               SALARY HIRE_DATE DEPARTMENT_ID        LOC
 
 ```
 
+## Data range
+
+### For Loops
+
+`for` loops can be used on the left hand side of an assignment. The syntax is: `for dimension in list`. List can be a constant list such as: `(1,2,3); ('string1', 'string2', 'string3')` or a subquery.
+
+Range examples:
+
+```
+for employee_id in (select employee_id from employees where ...)
+for employee_id in (103,104,105,106,107)
+for employee_id from 103 to 107 increment 1
+for number_in_string like 'Version%' from 1 to 3 increment 1
+--above produces 'Version1', 'Version2', 'Version3'
+```
+
+
+```sql
+select
+    employee_id,
+    first_name,
+    salary
+from employees
+model
+    return updated rows
+    dimension by (employee_id)
+    measures (first_name, salary)
+    rules (
+
+        first_name[for employee_id in (select employee_id from employees where job_id = 'IT_PROG')] = 'Programmer-' || first_name[cv()]
+
+    )
+order by employee_id
+```
+
+Output:
+```
+EMPLOYEE_ID FIRST_NAME               SALARY
+----------- -------------------- ----------
+        103 Programmer-Alexander       9000
+        104 Programmer-Bruce           6000
+        105 Programmer-David           4800
+        106 Programmer-Valli           4800
+        107 Programmer-Diana           4200
+```
+
+Right hand side loop:
+
+
+### Iteration models
+
+The `iterate` clause allows you to repeat an assignment, with an optional `until` clause. The rule will repeat until either there are no more iterations left or the `until` condition is met.
+
+```sql
+select
+    employee_id,
+    first_name,
+    salary,
+    new_Salary
+from employees
+where employee_id >= 200
+model
+    return updated rows
+    dimension by (employee_id)
+    measures (first_name, salary, salary new_salary)
+    rules iterate(3)(
+
+        new_salary[any] = new_salary[cv()]*(ITERATION_NUMBER+1)
+    )
+order by employee_id
+```
+Output:
+```
+EMPLOYEE_ID FIRST_NAME               SALARY NEW_SALARY
+----------- -------------------- ---------- ----------
+        200 Jennifer                   4400      26400
+        201 Michael                   13000      78000
+        202 Pat                        6000      36000
+        203 Susan                      6500      39000
+        204 Hermann                   10000      60000
+        205 Shelley                   12008      72048
+        206 William                    8300      49800
+
+ 7 rows selected
+```
+
 ## Useful resources
 
 [Model clause syntax](http://docs.oracle.com/cd/E11882_01/server.112/e41084/statements_10002.htm#SQLRF01702)  
 [Model Expressions in SQL Language Reference](http://docs.oracle.com/cd/E11882_01/server.112/e41084/expressions010.htm#SQLRF52086)  
 [SQL For Modelling in the Data Warehouse Guide](http://docs.oracle.com/cd/B19306_01/server.102/b14223/sqlmodel.htm)  
-[SQL Model clause tutorial part 1](http://rwijk.blogspot.nl/2007/10/sql-model-clause-tutorial-part-one.html)  
-[SQL Model clause tutorial part 2](http://rwijk.blogspot.nl/2007/10/sql-model-clause-tutorial-part-two.html)  
-[SQL Model clause tutorial part 3](http://rwijk.blogspot.nl/2009/01/sql-model-clause-tutorial-part-three.html)  
+[SQL Model clause tutorial](http://rwijk.blogspot.nl/2007/10/sql-model-clause-tutorial-part-one.html) (3 part series)
