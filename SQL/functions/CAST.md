@@ -1,6 +1,6 @@
 # CAST
 
-`cast` can be used to convert a value into a specific data type. You can for instance use cast instead of `to_number` when converting a string to a number.
+`cast` can be used to convert a value into a specific data type. You can for instance use `cast` instead of `to_number` when converting a string to a number.
 
 ```sql
 create or replace view v_number_sample
@@ -40,7 +40,7 @@ VER1      CHAR(13)
 VER2      VARCHAR2(200)
 ```
 
-`cast` can also be used with the multiset function, to return a subquery as a nested table type.
+`cast` can also be used with the `multiset` function, to return a subquery as a nested table type.
 
 ```sql
 create type locations_ot is object (
