@@ -1,7 +1,5 @@
 # FIRST_VALUE
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions066.htm#SQLRF00642
-
 FIRST_VALUE is an analytic function. Given and order by clause, you can find the first value in a set of rows.
 
 You may wish to determine the first hire date for each department, in an employee report

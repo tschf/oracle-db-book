@@ -1,7 +1,5 @@
 # LAST_VALUE
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions085.htm#SQLRF00655
-
 LAST_VALUE is an analytic function. Given and order by clause, you can find the last value in a set of rows.
 
 ```sql

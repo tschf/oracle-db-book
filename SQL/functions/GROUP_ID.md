@@ -1,7 +1,5 @@
 # GROUP_ID
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions070.htm#SQLRF00646
-
 If you have a complex group by expression, you may get duplicate rows. `group_id` is used to identify duplicates by returning values greater than zero when there is more than one occurrence of that row.
 
 ```sql

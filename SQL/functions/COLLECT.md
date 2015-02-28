@@ -1,7 +1,5 @@
 # COLLECT
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions031.htm#SQLRF06304
-
 COLLECT is used to return all the values into a nested table. To be useful, you need to have an custom data type to cast the data to, as demonstrated in the example below.
 
 ```sql

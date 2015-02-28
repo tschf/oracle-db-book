@@ -1,7 +1,5 @@
 # GROUPING
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions071.htm#SQLRF00647
-
 Used to distinguish between regular rows and superappgregate rows produces as a result of using a group by extension. If it is a regular row it returns `0` otherwise, it returns `1`
 
 ```sql

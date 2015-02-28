@@ -1,7 +1,5 @@
 # MIN
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions100.htm#SQLRF00667
-
 min is an aggregate function, to get the smallest value amongst a set of rows.
 
 ```sql

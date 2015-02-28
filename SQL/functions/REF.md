@@ -1,7 +1,5 @@
 # REF
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions145.htm#SQLRF00694
-
 `ref` is useful to get the object reference value for a row of an object table. As from the the [Oracle Database Object-Relational Developer's Guide](https://docs.oracle.com/cd/E11882_01/appdev.112/e11822/adobjdes.htm#ADOBJ00805), the returned value consists of (in order):
 
 * 16 bytes for the system generated object ID of the object reference

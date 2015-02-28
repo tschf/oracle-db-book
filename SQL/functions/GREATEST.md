@@ -1,7 +1,5 @@
 # GREATEST
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions069.htm#SQLRF00645
-
 GREATEST returns the largest of a set of values. The return type is based on the first value passed in.
 
 ```sql

@@ -1,7 +1,5 @@
 # NTILE
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions115.htm#SQLRF00680
-
 NTILE is an analytic function. It accepts one parameter - n - which determines which quartile the row falls in - up to a maximum of n, given by an order by clause in the analytic expression.
 
 If the number of rows is less than n, ntile will return the row number, as it can't satisfy all quartiles.

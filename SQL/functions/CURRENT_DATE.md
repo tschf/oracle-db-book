@@ -1,7 +1,5 @@
 # CURRENT_DATE
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions044.htm#SQLRF00628
-
 `current_date` is used to get the current date, obeying the sessions time zone. This differs from [`sysdate`](SYSDATE.md) which gets the date according the localisation of the database server.
 
 

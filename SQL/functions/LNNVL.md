@@ -1,7 +1,5 @@
 # LNNVL
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions091.htm#SQLRF06327
-
 `lnnvl` provides returns the inverse boolean value, whilst taking into account NULL values.
 
 

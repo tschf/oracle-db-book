@@ -1,7 +1,5 @@
 # NVL2
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions120.htm#SQLRF00685
-
 NVL2 accepts 3 parameters. If the first parameter is NOT NULL, it will output parameter 2, otherwise it will output parameter 3.
 
 e.g.

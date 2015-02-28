@@ -1,7 +1,5 @@
 # AVG
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions018.htm#SQLRF00609
-
 `avg` is an aggregate function, to get the average value amongst a set of rows. This only works on numerican data types.
 
 ```sql

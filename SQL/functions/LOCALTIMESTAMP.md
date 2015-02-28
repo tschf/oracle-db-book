@@ -1,7 +1,5 @@
 # LOCALTIMESTAMP
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions092.htm#SQLRF00660
-
 `localtimestamp` is used to get the current timestamp, ignoring the sessions time zone. This differs from `systimestamp` which gets the date according the localisation of the database server. The value returned does not include timezone information. If you want time zone information returned, you should use [CURRENT_TIMESTAMP](CURRENT_TIMESTAMP.md)
 
 ```sql

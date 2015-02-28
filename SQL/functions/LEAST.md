@@ -1,7 +1,5 @@
 # LEAD
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions087.htm#SQLRF00657
-
 LEAST returns the smallest of a set of values. The return type is based on the first value passed in.
 
 ```sql

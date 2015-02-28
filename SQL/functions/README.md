@@ -1,3 +1,5 @@
+For official documentation, please refer to the following function index: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions.htm#SQLRF006
+
 ABS  
 ACOS  
 ADD_MONTHS  

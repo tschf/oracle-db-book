@@ -1,7 +1,5 @@
 # GROUPING_ID
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions072.htm#SQLRF00648
-
 `grouping_id` returning the `grouping` bit vector. It is especially useful to determine the group by level.
 
 ```sql

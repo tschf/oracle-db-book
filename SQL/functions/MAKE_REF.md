@@ -1,7 +1,5 @@
 # MAKE_REF
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions097.htm#SQLRF00665
-
 `make_ref` provides a way to fetch an object reference from an object view.
 
 ```sql

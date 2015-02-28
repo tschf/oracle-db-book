@@ -1,7 +1,5 @@
 # DEREF
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions054.htm#SQLRF00634
-
 `deref` returns the object that is being referenced. Using the same data created in [`REF`](REF.md).
 
 ```sql

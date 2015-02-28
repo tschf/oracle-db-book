@@ -1,7 +1,5 @@
 # LEAD
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions086.htm#SQLRF00656
-
 LEAD is a way to access another row of the table you are querying without actually performing a self join.
 
 Imagine the use case you want to do a report on employees, and for each employee you list, you also want to know the employee with the next highest salary.

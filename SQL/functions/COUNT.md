@@ -1,7 +1,5 @@
 # COUNT
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions039.htm#SQLRF00624
-
 count is an aggregate function, to get the total number of rows in a given set of rows.
 
 ```sql

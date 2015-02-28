@@ -1,7 +1,5 @@
 # MAX
 
-Oracle documentation:
-
 `max` is an aggregate function, to get the smallest value amongst a set of rows.
 
 ```sql

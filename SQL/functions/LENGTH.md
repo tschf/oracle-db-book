@@ -1,7 +1,5 @@
 # LENGTH
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions088.htm#SQLRF00658
-
 There are five variants of this function:
 
 1. LENGTH - length in chars

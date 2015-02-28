@@ -1,7 +1,5 @@
 # CARDINALITY
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions022.htm#SQLRF06305
-
 `cardinality` is used to get the number of rows in a nested table.
 
 ```sql

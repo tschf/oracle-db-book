@@ -1,7 +1,5 @@
 # EXP
 
-Oracle documentation: https://docs.oracle.com/cd/E11882_01/server.112/e41084/functions058.htm#SQLRF00638
-
 `exp` raises Euler's number (e) to the power of n (the passed in parameter)
 
 
