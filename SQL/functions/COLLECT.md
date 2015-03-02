@@ -1,6 +1,6 @@
 # COLLECT
 
-COLLECT is used to return all the values into a nested table. To be useful, you need to have an custom data type to cast the data to, as demonstrated in the example below.
+`collect` is used to return all the values into a nested table. To be useful, you need to have an custom data type to cast the data to, as demonstrated in the example below.
 
 ```sql
 create table address(
@@ -32,6 +32,31 @@ ADDRESSES
 ------------------------------
 HR.ADDRESS_T('15 Shoestring st','7 Pleasant av','1 Highway rd','9 Osprey pl','255 Jane ct','12 Woodville rd')
 ```
+
+However, it only works when casting to a single data type nested table. This can be demonstrated with the following:
+
+```sql
+create type regions_ot is object (
+    region_id NUMBER,
+    region_name varchar2(25)
+);
+/
+
+create type regions_nt is table of regions_ot;
+/
+
+select cast(collect(region_id, region_name) as regions_nt)
+from regions
+```
+Output:
+```
+Error report -
+SQL Error: ORA-06553: PLS-306: wrong number or types of arguments in call to 'SYS_NT_COLLECT'
+06553. 00000 -  "PLS-%s: %s"
+*Cause:
+*Action:
+```
+In this situation, you may consider using [`multiset`](MULTISET.md).
 
 If we a table with a column that is a nested table of the same type:
 
