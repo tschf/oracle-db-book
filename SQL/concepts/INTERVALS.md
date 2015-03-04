@@ -143,7 +143,7 @@ YM      MS
 
 Aside from using the literals, there are also some functions that may be useful in getting an interval values:
 
-* NUMTOYMINTERVAL
-* NUMTODSINTERVAL
-* TO_DSINTERVAL
-* TO_YMINTERVAL
+* [NUMTOYMINTERVAL](../SQL/NUMTOYMINTERVAL.md)
+* [NUMTODSINTERVAL](../SQL/NUMTODSINTERVAL.md)
+* [TO_YMINTERVAL](../SQL/TO_YMINTERVAL.md)
+* [TO_DSINTERVAL](../SQL/TO_DSINTERVAL.md)
