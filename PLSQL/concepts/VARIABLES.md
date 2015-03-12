@@ -181,3 +181,172 @@ PL/SQL: Statement ignored
 ```
 
 If the data type is inherited from a table column that has a NOT NULL constraint, the constraint isn't inherited along with it, so you would need to specify NOT NULL again.
+
+## Scope
+
+Variables have block level scope in PL/SQL. When you nest blocks within one another, the PL/SQL engine first looks for the variable in the current scope. If it can't find that variable, it will look at the parent block, and so on.
+
+```plsql
+declare
+    a_name varchar2(10);
+    b_name varchar2(10);
+begin
+
+    a_name := 'ab';
+    b_name := 'zy';
+
+    declare
+        a_name varchar2(10);
+    begin
+        dbms_output.put_line(nvl(a_name,'-'));
+        dbms_output.put_line(b_name);
+        a_name := 'cd';
+        dbms_output.put_line(a_name);
+    end;
+
+end;
+```
+Output:
+```
+anonymous block completed
+-
+zy
+cd
+```
+Which as you can see, in the inner block `a_name` is looking up the variable from that block, but where the block doesn't have a scope for a variable name, it will look at the next level up.
+
+You can still refer to variables in the parent block. In the case of an anonymous block, you would need to give it a label, using the label identifiers `<<name>>`. Then the variable from that block can be accessed with _label.variable_.
+
+```plsql
+<<super>>
+declare
+    a_name varchar2(10);
+    b_name varchar2(10);
+begin
+
+    a_name := 'ab';
+    b_name := 'zy';
+
+    <<sub>>  
+    declare
+        a_name varchar2(10);
+    begin
+        dbms_output.put_line(super.a_name);
+        dbms_output.put_line(b_name);
+        a_name := 'cd';
+        dbms_output.put_line(sub.a_name);--equivelant to dbms_output.put_line(a_name);
+        super.a_name := 'zz';
+        dbms_output.put_line(a_name);
+    end;
+end;
+```
+Output:
+```
+anonymous block completed
+ab
+zy
+cd
+zz
+```
+
+If you are using a compiled procedure, you can access variables with _procedureName.variable_.
+
+```plsql
+create or replace procedure var_Scope
+as
+    a_name varchar2(10);
+begin
+    a_name := 'ab';
+    dbms_output.put_line(a_name);
+    <<var_scope>>
+    declare
+        a_name varchar2(10);
+    begin
+        dbms_output.put_line(var_Scope.a_name);
+        a_name := 'zy';
+        var_scope.a_name := 'ac';
+        dbms_output.put_line(a_name);
+    end;
+
+    dbms_output.put_line(a_name);
+end var_Scope;
+/
+
+begin
+
+    var_scope;
+
+end;
+/
+```
+Output:
+```
+anonymous block completed
+ab
+ab
+zy
+ac
+```
+
+If you have a procedure name and a block label with the same name, the closest one would be used.
+
+```
+create or replace procedure var_Scope
+as
+    a_name varchar2(10);
+begin
+    a_name := 'ab';
+    dbms_output.put_line(a_name);
+    <<var_scope>>
+    declare
+        a_name varchar2(10);
+    begin
+        dbms_output.put_line(nvl(var_Scope.a_name,'-'));
+        a_name := 'zy';
+        var_scope.a_name := 'ac';
+        dbms_output.put_line(a_name);
+    end;
+
+    dbms_output.put_line(a_name);
+end var_Scope;
+/
+
+begin
+
+    var_scope;
+
+end;
+/
+```
+or similarly:
+```plsql
+<<var_scope>>
+declare
+    a_name varchar2(10);
+
+    procedure var_scope
+    as
+        a_name varchar2(10);
+    begin
+        dbms_output.put_line(nvl(var_scope.a_name, '-'));
+        var_scope.a_name := 'ac';
+        dbms_output.put_line(a_name);
+    end var_scope;
+begin
+
+    a_name := 'ab';
+    dbms_output.put_line(a_name);
+    var_scope;
+    dbms_output.put_line(a_name);
+end;
+```
+
+Output:
+
+```
+anonymous block completed
+ab
+-
+ac
+ab
+```
