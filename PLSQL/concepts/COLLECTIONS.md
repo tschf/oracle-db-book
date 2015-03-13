@@ -230,7 +230,7 @@ Varray size: 4
 All: MICHELLE, PETER, MARY, TOM
 ```
 
-Varrays can also be used in SQL tables.
+`Varrays` can be set as the data type for a table column.
 
 ```plsql
 create or replace type t_four_strings is varray(4) of varchar2(10);
@@ -339,4 +339,36 @@ Delete 3rd element
 1: zxy
 2: Two
 4: abc
+```
+
+Nested tables can be set as the data type for a table column.
+
+```plsql
+create or replace type t_ages is table of NUMBER;
+/
+
+create table age_list(
+    ID NUMBER PRIMARY KEY
+  , AGES t_ages)
+NESTED TABLE AGES store as nested_names;
+/
+
+insert into age_list (ID, AGES) values (1, t_ages(1,5,6,1));
+insert into age_list (ID, AGES) values (2, t_ages(912,15,99));
+insert into age_list (ID, AGES) values (3, t_ages(15,1,5,7));
+insert into age_list (ID, AGES) values (4, t_ages(1));
+/
+
+select *
+from age_list
+```
+
+Output:
+```
+        ID AGES
+---------- ------------------------------
+         1 T_AGES(1, 5, 6, 1)
+         2 T_AGES(912, 15, 99)
+         3 T_AGES(15, 1, 5, 7)
+         4 T_AGES(1)
 ```
