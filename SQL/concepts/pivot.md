@@ -1,4 +1,4 @@
-# PIVOT
+# Pivot
 
 The `pivot` clause on an SQL query allows you to transpose column values into column headers, using an aggregate function.
 
@@ -73,4 +73,49 @@ Output:
         <column name = "COUNT(EMPLOYEE_ID)">5</column>
     </item>
 </PivotSet>
+```
+
+#Unpivot
+
+Unlike the `pivot` clause, `unpivot` does the reverse in that it converts a single row with many columns, into many rows with much less columns - typically 2.
+
+Suppose we have the following data:
+
+```
+EMPLOYEE_ID  AUS_SALES   US_SALES EURO_SALES
+----------- ---------- ---------- ----------
+        101        500       2000          0
+        102          0       3000        500
+```
+
+We can transform that to add a column for the country and a column for the sale amount like so:
+
+```sql
+with sales_data
+as
+(
+    select 101 employee_id, 500 aus_sales, 2000 us_sales, 0 euro_sales from dual union all
+    select 102, 0, 3000, 500 from dual
+)
+select employee_id, country, sales_amt
+from sales_data
+unpivot include nulls
+(
+    sales_amt for country in (aus_sales as 'aus', us_sales as 'us', euro_sales as 'euro')
+)
+```
+
+Giving us the desired output:
+
+```
+EMPLOYEE_ID COUNTRY  SALES_AMT
+----------- ------- ----------
+        101 aus            500
+        101 us            2000
+        101 euro             0
+        102 aus              0
+        102 us            3000
+        102 euro           500
+
+ 6 rows selected 
 ```
