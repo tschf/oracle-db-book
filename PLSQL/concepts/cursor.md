@@ -171,18 +171,162 @@ begin
 end;
 ```
 
-## Re-usable cursors
+## Re-usable cursors (ref cursors)
 
-//todo
+When you define a type that is a `ref cursor`, you can set it as the data type for variables (similar to how you do _cursorName_%type). You can optionally specify a return type of the `ref cursor` which means if you try and re-assign the value, it must conform to that record type.
+
+There is a built in ref cursor type that you can use, `sys_refcursor`, so that you don't have to declare your own `ref cursor` type.
+
+You can then fetch data using this ref cursor passing either a query or a string containing a query to the `open for` clause of the cursor variable.
+
+```plsql
+set serveroutput on
+
+declare
+    l_curs sys_refcursor;
+    l_emp employees%rowtype;
+
+    l_dyn_curs_query varchar2(200) := 'select * from employees where employee_id in (101,102)';
+begin
+
+    dbms_output.put_line('Pass a query');
+    open l_curs for
+        select *
+        from employees
+        where employee_id in (101, 102);
+
+    loop
+        fetch l_curs into l_emp;
+        exit when l_curs%NOTFOUND;
+        dbms_output.put_line(l_emp.last_name);
+    end loop;
+
+    close l_curs;--not strictly necessary, the resources for this cursor will be lost when re-opening it again
+    dbms_output.put_line('');
+    dbms_output.put_line('Pass a string containing a query');
+    open l_curs for
+        l_dyn_curs_query;
+
+    loop
+        fetch l_curs into l_emp;
+        exit when l_curs%NOTFOUND;
+        dbms_output.put_line(l_emp.last_name);
+    end loop;
+
+    close l_curs;
+
+
+end;
+```
+
+Output
+```
+Pass a query
+Kochhar
+De Haan
+
+Pass a string containing a query
+Kochhar
+De Haan
+```
+
+In the above snipped, we used the `sys_refcursor` data type, but could have easily declared our own type.
+
+```plsql
+type t_generic_cursor is ref cursor;
+l_curs t_generic_cursor
+```
+
+When declaring our own `ref cursor` type, we can make it strongly typed by giving it a return type, which enforces that when you open the cursor, the query you pass in must return that record type. You also **can not** pass a query in the form of a string.
+
+Ref cursors are useful also because you can passed them as named parameters to sub programs (of course, collecting the data into a collection and passing the collection is the other option).
+
+```plsql
+declare
+    type t_employee_curs is ref cursor return employees%rowtype;
+    l_curs t_employee_curs;
+
+    procedure print_last_names(p_emp_data in t_employee_curs)
+    as
+        l_emp employees%rowtype;
+    begin
+        loop
+            fetch p_emp_data into l_emp;
+            exit when p_emp_data%NOTFOUND;
+            dbms_output.put_line(l_emp.last_name);
+        end loop;
+    end print_last_names;
+begin
+
+    open l_curs for
+        select *
+        from employees
+        where employee_id in (101,102);
+
+    print_last_names(l_curs);
+
+    close l_curs;
+end;
+```
+
+## Nested cursors
+
+The `cursor` expression allows you to nest a subquery to return a second cursor for each row. When you fetch the record, you fetch the nested `cursor` into a `ref cursor` object, that you can then fetch each row for.
+
+```plsql
+declare
+
+
+    type t_city is record ( city varchar2(30) );
+    type t_city_rc is ref cursor return t_city;
+
+    cursor c_countries is
+        select country_name, cursor(select city from locations where country_id = countries.country_id)
+        from countries
+        where country_id = 'IT';
+
+    l_country countries.country_name%type;
+    l_city_cur t_city_rc;
+    l_city t_city;
+
+begin
+
+    open c_countries;
+    null;
+    loop
+        fetch c_countries into l_country, l_city_cur;
+        exit when c_countries%notfound;
+        
+        dbms_output.put_line(l_country);
+        dbms_output.put_line('Locations: ');
+        loop
+            fetch l_city_cur into l_city;
+            exit when l_city_cur%NOTFOUND;
+            dbms_output.put_line(l_city.city);
+        end loop;
+        dbms_output.put_line('');
+    end loop;
+
+end;
+```
+Output:
+```
+Italy
+Locations:
+Roma
+Venice
+```
 
 ## Cursor attributes
 
-* SQL%ISOPEN
-* SQL%FOUND
-* SQL%NOTFOUND
-* SQL%ROWCOUNT
-* SQL%BULK_ROWCOUNT
-* SQL%BULK_EXCEPTIONS
+* %ISOPEN
+* %FOUND
+* %NOTFOUND
+* %ROWCOUNT
+* %BULK_ROWCOUNT
+* %BULK_EXCEPTIONS
+
+For implicit cursors, each attribute is accessed with the `SQL` keyword, otherwise they are accessed with the named cursor. If you are using a cursor variable (ref cursor), attempting to access any attribute other than %ISOPEN will throw the `INVALID_CURSOR` exception.
 
 ### SQL%ISOPEN
 
