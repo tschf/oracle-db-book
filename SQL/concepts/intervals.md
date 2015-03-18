@@ -1,4 +1,4 @@
-# INTERVALS
+# Intervals
 
 Intervals are a convenient way to refer to units of time. They allow you to perform date arithmetic and are in terms of years, months, days, hours, minutes or seconds. The two datatypes that correspond to intervals are:
 

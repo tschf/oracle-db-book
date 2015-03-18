@@ -1,4 +1,4 @@
-# ANALYTIC FUNCTIONS
+# Analytic Functions
 
 Analytic functions, otherwise known as windowing functions, allow a function to be applied over a set of rows. Like aggregate functions, they can be applied to all the rows returned from a query - but they can also be applied to a subset of rows.
 

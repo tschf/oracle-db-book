@@ -1,4 +1,4 @@
-# MULTISETS
+# Multisets
 
 Multisets, are really just nested tables. The [`cast`](../functions/CAST.md) function is particularly useful here in converting your data into a nested table. Two common functions you would use in combination with [`cast`](../functions/CAST.md) are [`collect`](../functions/COLLECT.md) - which can convert into a nest table of a single data type - and `multiset` - which accepts a subquery. See the related documentation pages for specific examples.
 
@@ -55,7 +55,7 @@ where employee_id = 102;
 
 ```
 
-## UNION
+## Union
 
 ```sql
 select add_list multiset union add_list2
@@ -74,7 +74,7 @@ HR.T_ADDRESS_LIST(
 )
 ```
 
-## INTERSECT
+## Intersect
 
 ```sql
 select add_list multiset intersect add_list2 intersect_multiset
@@ -90,7 +90,7 @@ HR.T_ADDRESS_LIST(
 )  
 ```
 
-## EXCEPT
+## Except
 
 ```sql
 select add_list multiset except add_list2 except_multiset

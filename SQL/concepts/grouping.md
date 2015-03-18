@@ -1,4 +1,4 @@
-# GROUPING
+# Grouping
 
 ## Basics
 
@@ -502,7 +502,7 @@ Output:
 ```
 DEPT POSITION_ID CLASSIFICATION SUM(SALE_AMT)
 ---- ----------- -------------- -------------
-10   AC_ACCOUNT               2          1300 
+10   AC_ACCOUNT               2          1300
 10   MK_REP                   2           900
 10   SA_REP                   1          1200
 10   SA_REP                   2           900

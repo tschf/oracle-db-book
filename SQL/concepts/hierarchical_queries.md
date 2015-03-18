@@ -1,4 +1,4 @@
-# HIERARCHICAL QUERIES
+# Hierarchical Queries
 
 Otherwise knows as `tree queries`, are recursive queries that refer to the same entity, through some key field.
 
