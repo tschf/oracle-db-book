@@ -177,7 +177,7 @@ SELECT
 FROM employees
 order by salary
 ```
-equivelant to:
+equivalent to:
 ```sql
 SELECT
     manager_id,
