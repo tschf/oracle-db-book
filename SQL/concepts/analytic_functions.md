@@ -8,7 +8,7 @@ That analytic clause component is what defines the window used in computing the 
 
 1. `partition by` clause - given an expression list, separate windows will be created on each distinct group
 * `order by` clause - useful for analytic functions such as `row_number` `rank` `dense_rank` - amongst others. The results of the specified functions typically return a number bast on the order by clause. e.g. `row_number` will return a distinct row number, ordering by the `order by` clause.
-* window clause.
+* window clause
 
 For each row within a window, you can also further divide the window than what has already been accomplished with the `partition by` clause. It starts with:
 
@@ -16,6 +16,27 @@ For each row within a window, you can also further divide the window than what h
 * ROWS
 
 Then you will typically specify a start point and/or end point with the aid of the `between` keyword.
+
+The window clause is only supported by the following analytic functions:
+
+* AVG
+* CORR
+* COUNT
+* COVAR_POP
+* COVAR_SAMP
+* FIRST_VALUE
+* LAST_VALUE
+* MAX
+* MIN
+* NTH_VALUE
+* REGR_*
+* STDDEV
+* STDDEV_POP
+* STDDEV_SAMP
+* SUM
+* VAR_POP
+* VAR_SAMP
+* VARIANCE
 
 However, it is worth noting that in order to use range/rows, you must have an `order by` clause and the column expression must be either a numeric or date value. If you specify an `order by` clause, and leave off a range/rows expression, the default behaviour is to included only the range upto the current value (not larger values).
 
