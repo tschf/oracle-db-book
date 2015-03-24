@@ -170,4 +170,90 @@ delete from v_emps where employee_id = 999;
 
 ### Compound DML triggers
 
-//todo
+A compound trigger is one that can contain multiple blocks at particular timing events, such as before and after each row, and before and after the statement at a whole.
+
+```plsql
+create or replace trigger t2_region
+for update on regions
+compound trigger
+
+    before statement is
+    begin
+        dbms_output.put_line('Beginning update');
+    end before statement;
+
+    before each row is
+    begin
+        dbms_output.put_line('Before update row for region_id ' || :NEW.region_id);
+    end before each row;
+
+    after each row is
+    begin
+        dbms_output.put_line('After update row for region_id ' || :NEW.region_id);
+    end after each row;
+
+    after statement is
+    begin
+        dbms_output.put_line('Finishing update');
+    end after statement;
+
+end t2_region;
+/
+
+update regions
+set region_name = region_name;
+/
+```
+
+Output:
+```
+Beginning update
+Before update row for region_id 1
+After update row for region_id 1
+Before update row for region_id 2
+After update row for region_id 2
+Before update row for region_id 3
+After update row for region_id 3
+Before update row for region_id 4
+After update row for region_id 4
+Finishing update
+```
+
+What's particularly useful is that you can declare some variables that persist for the life of the statement being run. Demonstrable with a couple of number variables to show what's persisting over the life of the update statement.
+
+```plsql
+create or replace trigger t2_region
+for update on regions
+compound trigger
+
+    l_global NUMBER := 0;
+
+    before each row is
+        l_local NUMBER := 0;
+    begin
+        l_local := l_local + 1;
+        l_global := l_global + 1;
+        dbms_output.put_line('l_local is: ' || l_local);
+        dbms_output.put_line('l_global is: ' || l_global);
+    end before each row;
+end t2_region;
+/
+
+update regions
+set region_name = region_name;
+/
+```
+
+Output:
+```
+l_local is: 1
+l_global is: 1
+l_local is: 1
+l_global is: 2
+l_local is: 1
+l_global is: 3
+l_local is: 1
+l_global is: 4
+```
+
+Some good use cases for this being useful is to load the data into an associative array in the before statement section that can be used in the for each row clauses to reference table values without requerying in the for each row statement.
