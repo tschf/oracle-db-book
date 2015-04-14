@@ -123,6 +123,9 @@ PLS-00435: DML statement without BULK In-BIND cannot be used inside FORALL
 However, if we instead lookup a value from a collection (varray in this example), it will work.
 
 ```plsql
+create table bulk_demo2 (id number primary key);
+/
+
 declare
     type t_list is varray(2) of number;
     l_nums t_list := t_list(1,7);
@@ -130,7 +133,7 @@ begin
 
 
     forall i in 1..2
-        insert into bulk_demo (id)
+        insert into bulk_demo2 (id)
         values (l_nums(i));
 
 end;
@@ -147,6 +150,9 @@ The way you can handle this is to use the `save exceptions` clause on the `foral
 You need to handle this in an exception block associated to the error code `-24381`.
 
 ```plsql
+create table bulk_demo3 (id number primary key);
+/
+
 declare
     type t_list is varray(2) of number;
     l_nums t_list := t_list(1,1);
@@ -156,7 +162,7 @@ declare
 begin
 
     forall i in 1..2 save exceptions
-        insert into bulk_demo (id)
+        insert into bulk_demo3 (id)
         values (l_nums(i));
 
     exception
@@ -173,13 +179,30 @@ Could not insert: 1 row(s)
 We can also see how many rows were affected by the regular SQL%ROWCOUNT cursor variable. In addition, we get access to an associate array cursor variable SQL%BULK_ROWCOUNT which shows how many rows were affected in each sequential DML statement in the forall loop.
 
 ```plsql
+create table bulk_demo4(
+    id number primary key,
+    dept_no number not null);
+/
+
+insert into bulk_demo4 values (1, 10);
+insert into bulk_demo4 values (2, 10);
+insert into bulk_demo4 values (3, 20);
+insert into bulk_demo4 values (4, 20);
+insert into bulk_demo4 values (5, 20);
+insert into bulk_demo4 values (6, 30);
+insert into bulk_demo4 values (7, 30);
+insert into bulk_demo4 values (8, 30);
+insert into bulk_demo4 values (9, 30);
+insert into bulk_demo4 values (10, 40);
+/
+
 declare
     type t_depts is varray(4) of number;
     l_depts t_depts := t_depts(10,20,30,40);
 begin
 
     forall i in l_depts.FIRST..l_depts.LAST
-        delete from bulk_demo3
+        delete from bulk_demo4
         where dept_no = l_depts(i);
 
     dbms_output.put_line('Total affected rows: ' || SQL%ROWCOUNT);
