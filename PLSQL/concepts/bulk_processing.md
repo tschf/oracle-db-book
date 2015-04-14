@@ -87,3 +87,119 @@ begin
 
 end;
 ```
+
+You can only use a forall loop when you use the loop variable to lookup a value in an collection.
+
+```plsql
+create table bulk_demo(id NUMBER primary key);
+/
+
+begin
+
+
+    --forall i in 1..2
+    --    insert into employees (employee_id, last_name, email, hire_date, job_id)
+    --    values (100+i, 'Test'||i, i, sysdate, 'AD_PRES');
+
+    forall i in 1..2
+        insert into bulk_demo (id)
+        values (i);
+
+end;
+/
+```
+
+Output:
+```
+ORA-06550: line 10, column 17:
+PLS-00430: FORALL iteration variable I is not allowed in this context
+ORA-06550: line 9, column 9:
+PLS-00435: DML statement without BULK In-BIND cannot be used inside FORALL
+06550. 00000 -  "line %s, column %s:\n%s"
+*Cause:    Usually a PL/SQL compilation error.
+*Action:
+```
+
+However, if we instead lookup a value from a collection (varray in this example), it will work.
+
+```plsql
+declare
+    type t_list is varray(2) of number;
+    l_nums t_list := t_list(1,7);
+begin
+
+
+    forall i in 1..2
+        insert into bulk_demo (id)
+        values (l_nums(i));
+
+end;
+/
+```
+
+In a traditional loop, you can wrap any dml operations in a block so that you can handle exceptions on a row-by-row basis. This is not possible in a forall loop since you can only have one dml statement in the body of the forall statement.
+
+The way you can handle this is to use the `save exceptions` clause on the `forall` specification. This then returns the errors raised into the cursor variable `SQL%BULK_ERRORS`, which is a collection of records with the fields:
+
+1. error_index
+* error_code
+
+You need to handle this in an exception block associated to the error code `-24381`.
+
+```plsql
+declare
+    type t_list is varray(2) of number;
+    l_nums t_list := t_list(1,1);
+
+    bulk_errors exception;
+    pragma exception_init(bulk_errors, -24381);
+begin
+
+    forall i in 1..2 save exceptions
+        insert into bulk_demo (id)
+        values (l_nums(i));
+
+    exception
+    when bulk_errors then
+        dbms_output.put_line('Could not insert: ' || SQL%BULK_EXCEPTIONS.COUNT || ' row(s)');
+end;
+```
+
+Output:
+```
+Could not insert: 1 row(s)
+```
+
+We can also see how many rows were affected by the regular SQL%ROWCOUNT cursor variable. In addition, we get access to an associate array cursor variable SQL%BULK_ROWCOUNT which shows how many rows were affected in each sequential DML statement in the forall loop.
+
+```plsql
+declare
+    type t_depts is varray(4) of number;
+    l_depts t_depts := t_depts(10,20,30,40);
+begin
+
+    forall i in l_depts.FIRST..l_depts.LAST
+        delete from bulk_demo3
+        where dept_no = l_depts(i);
+
+    dbms_output.put_line('Total affected rows: ' || SQL%ROWCOUNT);
+
+    for i in l_depts.FIRST..l_depts.LAST
+    LOOP
+
+        dbms_output.put_line('dept ' || l_depts(i) || ' affected rows: ' || SQL%BULK_ROWCOUNT(i));
+
+    END LOOP;
+
+
+end;
+```
+
+Output:
+```
+Total affected rows: 10
+dept 10 affected rows: 2
+dept 20 affected rows: 3
+dept 30 affected rows: 4
+dept 40 affected rows: 1
+```
