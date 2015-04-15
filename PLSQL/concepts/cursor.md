@@ -296,7 +296,7 @@ begin
     loop
         fetch c_countries into l_country, l_city_cur;
         exit when c_countries%notfound;
-        
+
         dbms_output.put_line(l_country);
         dbms_output.put_line('Locations: ');
         loop
@@ -461,8 +461,67 @@ end;
 
 ### SQL%BULK_ROWCOUNT
 
-//todo
+Returns a collection containing the number of rows affected by each sequential statement in a `forall` loop.
+
+```plsql
+declare
+
+    type t_2array is varray(2) of departments.department_id%type;
+    l_rows t_2array := t_2array(10, 20);
+
+begin
+
+    forall i in l_rows.first..l_rows.last
+        update employees
+        set salary = salary*1.1
+        where department_id = l_rows(i);
+
+
+    for i in 1..l_rows.last
+    LOOP
+        dbms_output.put_line('Department: ' || l_rows(i) || ' update affected ' || SQL%BULK_ROWCOUNT(i) || ' rows');
+    END LOOP;
+
+end;
+```
 
 ### SQL%BULK_EXCEPTIONS
 
-//todo
+When specifying `save exceptions` on the `forall` loop, any exceptions are returned into this cursor variable. Each element is a record containing an error code and error index.
+
+```plsql
+create table bulk_insert(
+    id number primary key,
+    str varchar2(2)
+);
+/
+
+set serveroutput on
+
+declare
+
+    type t_3array is varray(3) of departments.department_id%type;
+    l_rows t_3array := t_3array(1,2,3);
+
+    bulk_Exception exception;
+    pragma exception_init(bulk_Exception, -24381);
+begin
+
+    forall i in l_rows.first..l_rows.last save exceptions
+        insert into bulk_insert (id, str)
+        values (l_rows(i), dbms_Random.string('u', l_rows(i)));
+
+exception
+    when bulk_Exception
+    then
+        dbms_output.put_line('Errors: ' || SQL%BULK_EXCEPTIONS.COUNT);
+        for i in 1..SQL%BULK_EXCEPTIONS.COUNT
+        LOOP
+            dbms_output.put_line('Error index: ' || SQL%BULK_EXCEPTIONS(i).error_index);
+            dbms_output.put_line('Error code: ' || SQL%BULK_EXCEPTIONS(i).error_code);
+        END LOOP;
+
+
+end;
+/
+```
