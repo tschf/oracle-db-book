@@ -5,7 +5,7 @@ There are five variants of this function:
 1. LENGTH - length in chars
 * LENGTHB - length in bytes
 * LENGTHC - length in unicode complete characters, meaning if it is a unicode complete character, it will return 1
-* LENGTH2 - length using uniocode USC-2 code points
+* LENGTH2 - length using unicode USC-2 code points
 * LENGTH4 - length using unicode USC-4 code points
 
 ```sql
