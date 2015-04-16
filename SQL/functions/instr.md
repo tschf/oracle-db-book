@@ -1,6 +1,6 @@
 #INSTR
 
-`instr` searches for one string, within another, and returns the starting index of the string being searched for. Another common name for this function in other languages is `indexOf`. If the search string is not found, `0` will be returned
+`instr` searches for one string, within another, and returns the starting index of the string being searched for. Another common name for this function in other languages is `indexOf`. If the search string is not found, `0` will be returned.
 
 There are five variants of this function:
 
@@ -10,7 +10,7 @@ There are five variants of this function:
 * instr2 - searches using unicode USC-4 code points
 * instr4 - searches using unicode USC-4 code points
 
-The function accepts at minimum two parameters, being the string you want to search and the string to search for. The other (two) optional parameters are the position to start from, and the occurance you would like to find.
+The function accepts at minimum two parameters, being the string you want to search and the string to search for. The other (two) optional parameters are the position to start from, and the occurrence you would like to find.
 
 ```sql
 with search_str as (
