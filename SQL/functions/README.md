@@ -25,7 +25,7 @@ CLUSTER_SET
 [COLLECT](COLLECT.md)  
 COMPOSE  
 [CONCAT](CONCAT.md)  
-CONVERT  
+[CONVERT](convert.md)  
 CORR  
 COS  
 COSH  
