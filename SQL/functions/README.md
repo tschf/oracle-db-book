@@ -212,7 +212,7 @@ TRUNC (date)
 TRUNC (number)  
 TZ_OFFSET  
 UID  
-UNISTR  
+[UNISTR](unistr.md)  
 UPDATEXML  
 [UPPER](UPPER.md)  
 USER  
