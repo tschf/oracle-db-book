@@ -35,7 +35,7 @@ COVAR_SAMP
 CUBE_TABLE  
 CUME_DIST  
 [CURRENT_DATE](current_date.md)  
-CURRENT_TIMESTAMP  
+[CURRENT_TIMESTAMP](current_timestamp.md)  
 [CV](cv.md)  
 DATAOBJ_TO_PARTITION  
 DBTIMEZONE  
