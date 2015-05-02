@@ -38,7 +38,7 @@ CUME_DIST
 [CURRENT_TIMESTAMP](current_timestamp.md)  
 [CV](cv.md)  
 DATAOBJ_TO_PARTITION  
-DBTIMEZONE  
+[DBTIMEZONE](dbtimezone.md)  
 DECODE  
 DECOMPOSE  
 DELETEXML  
