@@ -1,6 +1,6 @@
 # CURRENT_TIMESTAMP
 
-`current_timestamp` is used to get the current timestamp, obeying the sessions time zone. This differs from `systimestamp` which gets the date according the localisation of the database server. The value returned includes timezone information. If you don't want time zone information returned, you should use [LOCALTIMESTAMP](LOCALTIMESTAMP.md)
+`current_timestamp` is used to get the current timestamp, obeying the sessions time zone. This differs from `systimestamp` which gets the date according the localisation of the database server. The value returned includes timezone information. If you don't want time zone information returned, you should use [LOCALTIMESTAMP](localtimestamp.md)
 
 
 ```sql
