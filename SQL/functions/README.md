@@ -46,8 +46,8 @@ DENSE_RANK
 DEPTH  
 [DEREF](deref.md)  
 [DUMP](dump.md)  
-EMPTY_BLOB  
-EMPTY_CLOB  
+[EMPTY_BLOB](empty_blob.md)  
+[EMPTY_CLOB](empty_clob.md)  
 EXISTSNODE  
 [EXP](exp.md)  
 EXTRACT  
