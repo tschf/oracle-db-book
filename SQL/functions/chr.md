@@ -16,4 +16,5 @@ ASCII_A ASCII_B
 a       b  
 ```
 
-See [`ascii`](ascii.md) to go the other way.
+See [`ascii`](ascii.md) to go the other way.  
+You may also like to look at [`nchr`](nchr.md) to return the character as `nvarchar2`.
