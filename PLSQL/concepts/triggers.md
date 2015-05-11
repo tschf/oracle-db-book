@@ -38,7 +38,7 @@ Updating regions
 Deleting from regions
 ```
 
-When specifying `update`, you can proceed it with `of <column list>` to only fire when updating any of the specified column list. Then in the body, you can pass a value to the `updating` clause to check if that particular column is being updated.
+When specifying `update`, you can proceed it with `of <column list>` to only fire when updating any of the specified column list - where the column list is a comma separated list of columns. Then in the body, you can pass a value to the `updating` clause to check if that particular column is being updated.
 
 ```plsql
 create or replace trigger t1_region
