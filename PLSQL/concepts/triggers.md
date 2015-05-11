@@ -68,6 +68,31 @@ Updating region_name
 Deleting from regions
 ```
 
+It's important to note, that even if the value hasn't changed, the trigger will still fire for that update.
+
+```plsql
+create or replace trigger t1_region
+before update of region_name or delete on regions
+begin
+    if updating('region_name') then
+        dbms_output.put_line('Updating region_name');
+    end if;
+end;
+/
+
+update regions set region_name = 'Canada';
+update regions set region_name = 'Canada';
+```
+
+Output:
+```
+4 rows updated.
+Updating region_name
+
+4 rows updated.
+Updating region_name
+```
+
 The examples thus far have been statement level triggers, they will only execute once per each operation. Suppose you issue an update statement that affects more than one row, you may like the trigger to fire once per affected row. To do so, you can add the `for each row` clause before the body of the trigger. The benefit of row level triggers is that you can also access new and old pseudo records which contain all fields in the table that is affected. On `before` triggers, it is possible to modify the `new` value.
 
 ```plsql
@@ -75,7 +100,13 @@ create or replace trigger t1_region
 before update on regions
 for each row
 begin
-    dbms_output.put_line ('Updating region name from "' || :old.region_name || '" to "' || :new.region_name || '"');
+    dbms_output.put_line (
+        'Updating region name from "'
+        || :old.region_name
+        || '" to "'
+        || :new.region_name
+        || '"'
+    );
 end;
 /
 
@@ -104,6 +135,41 @@ for each row
 begin
     dbms_output.put_line ('Updating region name from "' || :original.region_name || '" to "' || :modified.region_name || '"');
 end;
+```
+
+You can also make running a trigger conditional be having a `when` condition which is defined before the body of the trigger. These `when` conditions can also reference `new` and `old` values, however unlike previous examples, you can't use the bind syntax on them (preceeded by a colon).
+
+```plsql
+create or replace trigger t1_region
+before update on regions
+referencing
+    new as modified
+    old as original
+for each row
+when (length(modified.region_name) > 5)
+begin
+    dbms_output.put_line ('Updating region name from "' || :original.region_name || '" to "' || :modified.region_name || '"');
+end;
+/
+
+update regions
+set region_name = 'China';
+/
+
+update regions
+set region_name = 'New York';
+/
+```
+Output:
+```
+4 rows updated.
+
+4 rows updated.
+
+Updating region name from "China" to "New York"
+Updating region name from "China" to "New York"
+Updating region name from "China" to "New York"
+Updating region name from "China" to "New York"
 ```
 
 ### View trigger
