@@ -74,7 +74,7 @@ INSERTXMLBEFORE
 [ITERATION_NUMBER](iteration_number.md)  
 [LAG](lag.md)  
 LAST  
-LAST_DAY  
+[LAST_DAY](last_day.md)  
 [LAST_VALUE](last_value.md)  
 [LEAD](lead.md)  
 [LEAST](least.md)  
