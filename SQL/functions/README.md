@@ -82,7 +82,7 @@ LAST_DAY
 LISTAGG  
 LN  
 [LNNVL](lnnvl.md)  
-LOCALTIMESTAMP  
+[LOCALTIMESTAMP](localtimestamp.md)  
 LOG  
 [LOWER](lower.md)  
 LPAD  
