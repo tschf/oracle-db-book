@@ -79,7 +79,7 @@ LAST
 [LEAD](lead.md)  
 [LEAST](least.md)  
 [LENGTH](length.md)  
-LISTAGG  
+[LISTAGG](listagg.md)  
 LN  
 [LNNVL](lnnvl.md)  
 [LOCALTIMESTAMP](localtimestamp.md)  
