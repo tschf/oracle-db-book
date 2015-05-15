@@ -85,7 +85,7 @@ LN
 [LOCALTIMESTAMP](localtimestamp.md)  
 LOG  
 [LOWER](lower.md)  
-LPAD  
+[LPAD](lpad.md)  
 LTRIM  
 [MAKE_REF](make_ref.md)  
 [MAX](max.md)  
@@ -149,7 +149,7 @@ ROUND (number)
 ROW_NUMBER  
 ROWIDTOCHAR  
 ROWIDTONCHAR  
-RPAD  
+[RPAD](rpad.md)  
 RTRIM  
 SCN_TO_TIMESTAMP  
 SESSIONTIMEZONE  
