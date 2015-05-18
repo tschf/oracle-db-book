@@ -57,7 +57,7 @@ FEATURE_SET
 FEATURE_VALUE  
 FIRST  
 [FIRST_VALUE](first_value.md)  
-FLOOR  
+[FLOOR](floor.md)  
 FROM_TZ  
 [GREATEST](greatest.md)  
 [GROUP_ID](group_id.md)  
