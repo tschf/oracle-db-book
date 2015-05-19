@@ -39,7 +39,7 @@ CUME_DIST
 [CV](cv.md)  
 DATAOBJ_TO_PARTITION  
 [DBTIMEZONE](dbtimezone.md)  
-DECODE  
+[DECODE](decode.md)  
 DECOMPOSE  
 DELETEXML  
 DENSE_RANK  
