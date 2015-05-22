@@ -14,7 +14,7 @@ BFILENAME
 [BIN_TO_NUM](bin_to_num.md)  
 [BITAND](BITAND.md)  
 [CARDINALITY](cardinality.md)  
-CAST  
+[CAST](cast.md)  
 [CEIL](ceil.md)  
 CHARTOROWID  
 [CHR](chr.md)  
