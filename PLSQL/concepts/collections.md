@@ -372,3 +372,8 @@ Output:
          3 T_AGES(15, 1, 5, 7)
          4 T_AGES(1)
 ```
+
+Some handy nested table functions you may like to pay particular attention to are (both requiring the use of cast):
+
+* collect - collects values and returns a nested table type
+* multiset - returns the result of a subquery as a nested table type
