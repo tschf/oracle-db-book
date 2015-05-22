@@ -267,7 +267,7 @@ Output:
 
 A `nested table` is type of an array. It is different to a `varray` in that there is no upper limit and the index of elements doesn't necessarily go sequentially (in the case of removing elements). When you initialise a `nested array` the elements are accessed by a numerical subscript, and when values are added, they go into the nested array, in sequential order.
 
-The syntax for creating the type is quite similar to an associative array, except you leave of the `index by` clause. Giving us the syntax: type _typeName_ is table of _dataType_. It can be created at the block level or the schema level, and can also be set as a columns data type in a table.
+The syntax for creating the type is quite similar to an associative array, except you leave off the `index by` clause. Giving us the syntax: type _typeName_ is table of _dataType_. It can be created at the block level or the schema level, and can also be set as a columns data type in a table.
 
 ```plsql
 
