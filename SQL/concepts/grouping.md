@@ -2,7 +2,7 @@
 
 ## Basics
 
-Sometimes the results of your SQL query, will contain duplicates.
+Sometimes the results of your SQL query will contain duplicates.
 
 ```sql
 select first_name, job_id
