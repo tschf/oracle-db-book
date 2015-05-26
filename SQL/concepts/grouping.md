@@ -96,7 +96,7 @@ For a full list of all available aggregate functions, refer to the official docu
 
 ## Group by extension
 
-In addition to regular groupings, you can also produce superaggregate groupings bu using the `rollup` or `cube` functions in the `group by` clause.
+In addition to regular groupings, you can also produce superaggregate groupings by using the `rollup` or `cube` functions in the `group by` clause.
 
 ### Rollup
 
