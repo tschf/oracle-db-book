@@ -106,7 +106,7 @@ The best explanation for the `rollup` extension is explained on the [SQL for Agg
 >
 > ROLLUP creates subtotals at n+1 levels, where n is the number of grouping columns. For instance, if a query specifies ROLLUP on grouping columns of time, region, and department(n=3), the result set will include rows at four aggregation levels.
 
-The `rollup` function create summary rows for each grouping, as well as a grand total row.
+The `rollup` function creates summary rows for each grouping, as well as a grand total row.
 
 Given the following sales data:
 
