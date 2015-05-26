@@ -38,7 +38,7 @@ The window clause is only supported by the following analytic functions:
 * VAR_SAMP
 * VARIANCE
 
-However, it is worth noting that in order to use range/rows, you must have an `order by` clause and the column expression must be either a numeric or date value. If you specify an `order by` clause, and leave off a range/rows expression, the default behaviour is to included only the range upto the current value (not larger values).
+However, it is worth noting that in order to use range/rows, you must have an `order by` clause and the column expression must be either a numeric or date value. If you specify an `order by` clause, and leave off a range/rows expression, the default behaviour is to include only the range upto the current value (not larger values).
 
 ```sql
 select
