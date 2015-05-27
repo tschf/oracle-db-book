@@ -7,8 +7,8 @@ select
     trim(' abracadabra ') trim_1
   , trim('0' from '0abracadabra0') trim_2
   , trim(both '0' from '0abracadabra0') trim_3
-  , trim(leading '0' from '0abracadabra0') trim_3
-  , trim(trailing '0' from '0abracadabra0') trim_3
+  , trim(leading '0' from '0abracadabra0') trim_4
+  , trim(trailing '0' from '0abracadabra0') trim_5
 from dual
 ```
 Output:
