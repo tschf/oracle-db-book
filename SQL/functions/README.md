@@ -86,7 +86,7 @@ LN
 LOG  
 [LOWER](lower.md)  
 [LPAD](lpad.md)  
-LTRIM  
+[LTRIM](ltrim.md)  
 [MAKE_REF](make_ref.md)  
 [MAX](max.md)  
 MEDIAN  
@@ -150,7 +150,7 @@ ROW_NUMBER
 ROWIDTOCHAR  
 ROWIDTONCHAR  
 [RPAD](rpad.md)  
-RTRIM  
+[RTRIM](rtrim.md)  
 SCN_TO_TIMESTAMP  
 SESSIONTIMEZONE  
 SET  
@@ -207,7 +207,7 @@ TO_TIMESTAMP_TZ
 [TO_YMINTERVAL](to_yminterval.md)  
 [TRANSLATE](translate.md)  
 TREAT  
-TRIM  
+[TRIM](trim.md)  
 TRUNC (date)  
 TRUNC (number)  
 TZ_OFFSET  
