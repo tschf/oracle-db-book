@@ -2,7 +2,7 @@ For official documentation, please refer to the following function index: https:
 
 ABS  
 ACOS  
-ADD_MONTHS  
+[ADD_MONTHS](add_months.md)  
 APPENDCHILDXML  
 [ASCII](ascii.md)  
 [ASCIISTR](asciistr.md)  
