@@ -1,6 +1,31 @@
 # XML Querying
 
-The Oracle database has support for `XML` data types. The type that denotes this field is `XMLType`. `XMLType` is unique in that it is both a data type and can be used as a constructor to return an `XMLType` data type. The first parameter can be CLOB or Varchar2, with optional parameters of: schema, validated, wellformed. The constructor is a part of the [XMLType package](http://docs.oracle.com/cd/B19306_01/appdev.102/b14258/t_xml.htm#BABHCHHJ).
+The Oracle database has support for `XML` data types. You can verify that XML support is installed in your database by ensuring the `xdb` user exists, as well as doing a describe on `resource_view`.
+
+```sql
+select count(1)
+from all_users
+where username = 'XDB';
+/
+
+describe resource_view;
+/
+```
+
+Output:
+```
+COUNT(1)
+----------
+       1
+
+Name     Null Type
+-------- ---- --------------
+RES           XMLTYPE()
+ANY_PATH      VARCHAR2(4000)
+RESID         RAW(16 BYTE)
+```
+
+The type that denotes this field is `XMLType`. `XMLType` is unique in that it is both a data type and can be used as a constructor to return an `XMLType` data type. The first parameter can be CLOB or Varchar2, with optional parameters of: schema, validated, well formed. The constructor is a part of the [XMLType package](http://docs.oracle.com/cd/B19306_01/appdev.102/b14258/t_xml.htm#BABHCHHJ).
 
 When calling the constructor, the `XML` that you pass in must be valid XML, otherwise you will receive an `ORA-31011: XML parsing failed` error.
 
