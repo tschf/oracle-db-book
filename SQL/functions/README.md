@@ -106,7 +106,7 @@ NLS_UPPER
 NLSSORT  
 NTH_VALUE  
 [NTILE](NTILE.md)  
-NULLIF  
+[NULLIF](NULLIF.md)  
 [NUMTODSINTERVAL](numtodsinterval.md)  
 [NUMTOYMINTERVAL](numtoyminterval.md)  
 [NVL](NVL.md)  
