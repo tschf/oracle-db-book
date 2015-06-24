@@ -134,4 +134,121 @@ You cannot perform comparisons on two record variables, however if two record va
 
 ## Object
 
-//todo
+An object is the other type that can be created and is much more extensible than a record - as well as having slightly different syntax.
+
+Unlike records, objects can not be declared in-line (for procedural blocks of code) - but need to be declared at the schema level.
+
+```sql
+create or replace type t_person_obj is object (
+    first_name varchar2(20),
+    last_name varchar2(25),
+    hire_date DATE
+);
+/
+```
+
+When we want to use this object in a PL/SQL code block, we need to first initialize it. That is, we can't follow the pattern of `record`s and just assign values without first initialising the object.
+
+If we try to run the following code:
+
+```plsql
+declare
+    l_info t_person_obj;
+begin
+    l_info.first_name := 'Thomas';
+end;
+```
+
+we get the following error:
+
+```
+Error report -
+ORA-06530: Reference to uninitialized composite
+ORA-06512: at line 4
+06530. 00000 -  "Reference to uninitialized composite"
+*Cause:    An object, LOB, or other composite was referenced as a
+           left hand side without having been initialized.
+*Action:   Initialize the composite with an appropriate constructor
+           or whole-object assignment.
+```
+
+So, we would need to initialize the object. Our object has three properties (first_name, last_name and hire_date) so if we don't know the values at initialisation time, we can just pass NULL.
+
+In this simplistic set up of the object, we **must** pass in the number of parameters that exist in the object.
+
+```plsql
+declare
+    l_person1 t_person_obj;
+    l_person2 t_person_obj;
+
+    procedure print_person_info(p_person in t_person_obj)
+    as
+    begin
+        dbms_output.put_line('First: ' || p_person.first_name);
+        dbms_output.put_line('Last: ' || p_person.last_name);
+        dbms_output.put_line('Hire Date: ' || p_person.hire_date);
+        dbms_output.put_line('..');
+    end print_person_info;
+begin
+    l_person1 := t_person_obj(NULL,NULL,NULL);
+
+    l_person1.first_name := 'Thomas';
+    l_person1.last_name := 'Smith';
+    l_person1.hire_date := date '1946-01-03';
+
+    print_person_info(l_person1);
+    --
+
+    l_person2 := t_person_obj('Mary-Jane', 'Smith', date '1949-05-05');
+
+    print_person_info(l_person2);
+end;
+/
+```
+
+Output:
+```
+First: Thomas
+Last: Smith
+Hire Date: 03/JAN/46
+..
+First: Mary-Jane
+Last: Smith
+Hire Date: 05/MAY/49
+..
+```
+
+Unlike records where we can select table columns directly into the user-defined type, when working with objects you need to wrap the matching columns in the objects constructor like so:
+
+```plsql
+declare
+    l_person t_person_obj;
+
+    procedure print_person_info(p_person in t_person_obj)
+    as
+    begin
+        dbms_output.put_line('First: ' || p_person.first_name);
+        dbms_output.put_line('Last: ' || p_person.last_name);
+        dbms_output.put_line('Hire Date: ' || p_person.hire_date);
+        dbms_output.put_line('..');
+    end print_person_info;
+begin
+    select t_person_obj(first_name, last_name, hire_Date)
+    into l_person
+    from employees
+    where employee_id = 101;
+
+    print_person_info(l_person);
+
+end;
+/
+```
+
+Output:
+```
+First: Neena
+Last: Kochhar
+Hire Date: 21/SEP/05
+..
+
+```
