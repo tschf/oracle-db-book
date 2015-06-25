@@ -252,3 +252,92 @@ Hire Date: 21/SEP/05
 ..
 
 ```
+
+There are a couple of approaches you can use to return the results into a collection. The familiar `bulk collect into` operation or to make use of the `cast` and `multiset` functions.
+
+Bulk collect:
+
+```plsql
+declare
+    l_person t_person_obj;
+    type t_person_list is table of t_person_obj;
+    l_people t_person_list;
+
+    procedure print_person_info(p_person in t_person_obj)
+    as
+    begin
+        dbms_output.put_line('First: ' || p_person.first_name);
+        dbms_output.put_line('Last: ' || p_person.last_name);
+        dbms_output.put_line('Hire Date: ' || p_person.hire_date);
+        dbms_output.put_line('..');
+    end print_person_info;
+begin
+
+    select t_person_obj(first_name, last_name, hire_date)
+    bulk collect into l_people
+    from employees
+    where employee_id in (101, 102, 103);
+
+    for i in 1..l_people.count
+    loop
+        print_person_info(l_people(i));
+    end loop;
+
+end;
+```
+
+`cast` and `multiset`:
+
+```plsql
+create or replace type t_person_list is table of t_person_obj;
+/
+
+declare
+    l_person t_person_obj;
+    l_people t_person_list;
+
+    procedure print_person_info(p_person in t_person_obj)
+    as
+    begin
+        dbms_output.put_line('First: ' || p_person.first_name);
+        dbms_output.put_line('Last: ' || p_person.last_name);
+        dbms_output.put_line('Hire Date: ' || p_person.hire_date);
+        dbms_output.put_line('..');
+    end print_person_info;
+begin
+
+     select
+        cast(
+            multiset(
+                select first_name, last_name, hire_date
+                from employees
+                where employee_id in (101,102,103))
+            as t_person_list)
+            into l_people
+        from dual;
+
+
+    for i in 1..l_people.count
+    loop
+        print_person_info(l_people(i));
+    end loop;
+
+end;
+/
+```
+
+Output:
+```
+First: Neena
+Last: Kochhar
+Hire Date: 21/SEP/05
+..
+First: Lex
+Last: De Haan
+Hire Date: 13/JAN/01
+..
+First: Alexander
+Last: Hunold
+Hire Date: 03/JAN/06
+..
+```
