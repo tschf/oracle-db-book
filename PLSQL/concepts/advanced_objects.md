@@ -270,3 +270,294 @@ begin
 end;
 /
 ```
+
+
+# Object Inheritance
+
+PL/SQL types support parent-child relationships, as you'd expect from an Object-Oriented language. We already have a person_typ, so suppose we wanted to expand on this to have object for particular types of people.
+
+Objects have a property that determine whether or not they can be extended on. That is whether it is `FINAL` or `NOT FINAL`. Only those objects that explictly specify that they are `NOT FINAL` can be inherited in any sub-types. On a subtype, you do not specify the `is object` clause, but rather `under parent` where parent is the parent type you are inheriting from. You specify whether a type is final at the end of the specification after all the fields and attributes; alternatively, you can alter the type to make it final or not final.
+
+```plsql
+create or replace type house_typ is object (
+    age NUMBER,
+    rooms NUMBER
+) NOT FINAL;
+/
+--or
+alter type house_type NOT FINAL;
+/
+```
+
+Once an object has dependents, it will not be possible to compile the type specification anymore, as it is relied on by other objects. You can however issue alter statements (with the `cascade` or `invalidate` options) to the type to add new fields. note: This rule doesn't apply to type bodies - they can be recompiled without issue.
+
+```plsql
+create or replace type person_typ is object (
+    id NUMBER,
+    first_name varchar2(20),
+    last_name varchar2(25),
+    hire_date DATE
+) NOT FINAL;
+/
+
+create or replace type developer_typ under person_typ  (
+    programming_language varchar2(50)
+);
+/
+
+--can only add new fields to person_typ with the alter type statement
+alter type person_typ add attribute termination_date DATE cascade;
+/
+```
+
+With this, our new `developer_typ` object automatically contain all the fields contained in `person_typ`. The default constructor then follows the field in the order from top level, down.
+
+```plsql
+declare
+    l_dev developer_typ;
+begin
+    --developer_typ(ID, FIRST_NAME, LAST_NAME, HIRE_DATE, TERMINATION_DATE, PROGRAMMING_LANGUAGE)
+    l_dev := developer_typ(1, 'John', 'Smith', NULL, NULL, 'Java');
+
+    dbms_output.put_line(l_dev.programming_language);--Java
+end;
+```
+
+If you wish to override a function/procedure in a subtype (having a function/procedure with the same signature as its parent), you need to prefix the function/procedure with the `overriding`clause. In the subtype, if you wish to call a parents function, you need to cast self as the parent type (which is valid, since it inherits), then call the function/procedure.
+
+```plsql
+create or replace type person_typ is object (
+    id NUMBER,
+    first_name varchar2(20),
+    last_name varchar2(25),
+    hire_date DATE,
+    member procedure print_info
+) NOT FINAL;
+/
+
+create or replace type body person_typ as
+
+    member procedure print_info
+    as
+    begin
+        dbms_output.put_line(self.first_name || ' ' || self.last_name);
+    end;
+
+end;
+/
+
+create or replace type developer_typ under person_typ  (
+    programming_language varchar2(50),
+    overriding member procedure print_info
+);
+/
+
+create or replace type body developer_typ as
+
+    overriding member procedure print_info
+    as
+    begin
+        (self as person_typ).print_info();
+        dbms_output.put_line(self.programming_language);
+    end print_info;
+
+end;
+/
+```
+
+The neat thing with this type inheritance is that you can create an object table referring to the parent and any subtypes are able to be stored in the table. Although, just querying the table you would only get the attributes from the parent type.
+
+```plsql
+create or replace type person_typ is object (
+    id NUMBER,
+    first_name varchar2(20),
+    last_name varchar2(25),
+    hire_date DATE,
+    member function get_info return varchar
+) NOT FINAL;
+/
+
+create or replace type body person_typ as
+
+    member function get_info return varchar
+    as
+    begin
+        return self.first_name || ' ' || self.last_name;
+    end;
+
+end;
+/
+
+create or replace type developer_typ under person_typ  (
+    programming_language varchar2(50),
+    overriding member function get_info return varchar
+);
+/
+
+create or replace type body developer_typ as
+
+    overriding member function get_info return varchar
+    as
+    begin
+        return (self as person_typ).get_info() || ' --Language: ' || self.programming_language;
+    end get_info;
+
+end;
+/
+--
+
+create table objtable_people of person_Typ;
+/
+
+insert into objtable_people values (person_typ(1, 'John', 'Smith', NULL));
+insert into objtable_people values (developer_typ(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
+/
+
+select otp.*, otp.get_info() person_info
+from objtable_people otp;
+/
+
+
+/* Query Result:
+ID   FIRST_NAME  LAST_NAME  HIRE_DATE  PERSON_INFO
+---  ----------- ---------- ---------  -------------------------------
+ 1   John        Smith                 John Smith
+ 2   Mark        Henderson             Mark Henderson --Language: PL/SQL   
+*/
+```
+
+You may like to make your types or functions abstract, that is making them so they cannot be instantiated. To do so, you can specify `NOT INSTANTIABLE` then only subclasses that inherit will be able to be initialised in your programs..
+
+```plsql
+create or replace type person_typ is object (
+    id NUMBER,
+    first_name varchar2(20),
+    last_name varchar2(25),
+    hire_date DATE,
+    member function get_info return varchar2
+)
+NOT INSTANTIABLE
+NOT FINAL;
+/
+
+create or replace type body person_typ
+as
+
+    member function get_info return varchar2
+    as
+    begin
+        return self.first_name;
+    end get_info;
+
+end;
+/
+
+create or replace type developer_typ under person_typ(
+    programming_language varchar2(50)
+);
+/
+
+declare
+    l_pers person_typ;
+
+begin
+
+    l_pers := person_typ(1, 'John', 'Smith', NULL);
+    dbms_output.put_line(l_pers.get_info());--never get here
+    /*
+    ORA-06550: line 6, column 15:
+    PLS-00713: attempting to instantiate a type that is NOT INSTANTIABLE
+    ORA-06550: line 6, column 5:
+    PL/SQL: Statement ignored
+    06550. 00000 -  "line %s, column %s:\n%s"
+    *Cause:    Usually a PL/SQL compilation error.
+    *Action:
+    */
+
+end;
+/
+
+declare
+    l_pers developer_typ;
+begin
+
+    l_pers := developer_typ(1, 'John', 'Smith', NULL, 'PL/SQL');
+    dbms_output.put_line(l_pers.get_info());--John
+
+end;
+/
+```
+
+In the case of applying `NOT INSTANTIABLE` to a method, this serves as as a mechanism to declare a method specification, without implementing it in the type body (your subtypes would each have their own implementation). If you declare a method in the type specification, you would usually have to add an implementation.
+
+```plsql
+create or replace type person_typ is object (
+    id NUMBER,
+    first_name varchar2(20),
+    last_name varchar2(25),
+    hire_date DATE,
+    not instantiable member function get_info return varchar2,
+    member function get_id return NUMBER
+)
+NOT INSTANTIABLE
+NOT FINAL;
+/
+
+create or replace type body person_typ
+as
+
+    member function get_id return NUMBER
+    as
+    begin
+        return self.id;
+    end;    
+
+end;
+/
+```
+
+You may also wish to restrict that a method can't be overridden in a future subtype. This is achievable my adding the `FINAL` property to the start of the method signature.
+
+The final thing you will likely want to be able to do is test the type of an object. The predicate `is of type` will be useful here. In th example, I am outputing a string depending on the type - following this, you will want to start with a bottom-up approach, since if you do a top-down approach all cases will match the first test, since all developers are people.
+
+```sql
+create or replace type person_typ is object (
+    id NUMBER,
+    first_name varchar2(20),
+    last_name varchar2(25),
+    hire_date DATE,
+) NOT FINAL;
+/
+
+create or replace type developer_typ under person_typ  (
+    programming_language varchar2(50)
+);
+/
+
+create table objtable_people of person_Typ;
+/
+
+insert into objtable_people values (person_typ(1, 'John', 'Smith', NULL));
+insert into objtable_people values (developer_typ(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
+/
+
+select
+    otp.id
+  , otp.last_name
+  , case
+        when value(otp) is of (developer_typ)
+            then 'Developer'
+        when value(otp) is of (hr.person_typ)
+            then 'Person'
+
+    end type_kind
+from objtable_people otp
+
+/* Output:
+
+ID  LAST_NAME   TYPE_KIND
+--- ----------- --------------
+ 1  Smith       Person   
+ 2  Henderson   Developer
+ */
+```
