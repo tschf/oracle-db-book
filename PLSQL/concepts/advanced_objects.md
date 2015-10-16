@@ -561,3 +561,84 @@ ID  LAST_NAME   TYPE_KIND
  2  Henderson   Developer
  */
 ```
+
+We can also use what we've learnt here for use in our PL/SQL code, with the addition of the `treat` function in order to cast what is stored into sub-types.
+
+```plsql
+create or replace type person_typ is object (
+    id NUMBER,
+    first_name varchar2(20),
+    last_name varchar2(25),
+    hire_date DATE
+) NOT FINAL;
+/
+
+create or replace type developer_typ under person_typ  (
+    programming_language varchar2(50)
+);
+/
+
+create table objtable_people of person_Typ;
+/
+
+insert into objtable_people values (person_typ(1, 'John', 'Smith', NULL));
+insert into objtable_people values (developer_typ(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
+/
+
+declare
+
+    type t_person_list is table of person_typ
+        index by PLS_INTEGER;
+    l_all_people t_person_list;    
+
+    l_person person_typ;
+    l_developer developer_typ;
+
+begin
+
+    select value(otp)
+    bulk collect into l_all_people
+    from objtable_people otp;
+
+    for i in 1..l_all_people.COUNT
+    loop
+
+        dbms_output.put_line('Row ' || i);
+
+        if l_all_people(i) is of (developer_typ)
+        then
+            dbms_output.put_line('Developer');
+            l_developer := treat(l_all_people(i) as developer_typ);
+
+            dbms_output.put_line('First name: ' || l_developer.first_name);
+            dbms_output.put_line('Last name: ' || l_developer.last_name);
+            dbms_output.put_line('Programming Language: ' || l_developer.programming_language);
+        elsif l_all_people(i) is of (person_typ)
+        then
+            dbms_output.put_line('Person');
+            l_person := treat(l_all_people(i) as person_typ);
+            dbms_output.put_line('First name: ' || l_person.first_name);
+            dbms_output.put_line('Last name: ' || l_person.last_name);
+        else
+            dbms_output.put_line('Uknown type');
+        end if;
+
+    end loop;
+
+    /* Output:
+
+
+    Row 1
+    Person
+    First name: John
+    Last name: Smith
+    Row 2
+    Developer
+    First name: Mark
+    Last name: Henderson
+    Programming Language: PL/SQL
+    */
+
+end;
+/
+```
