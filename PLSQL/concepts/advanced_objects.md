@@ -52,7 +52,7 @@ Both object tables and objects as a column support regular insertion and queryin
 
 ```sql
 --object table
-insert into objtable_person values (person_typ('John', 'Smith', sysdate));
+insert into objtable_person values (person_typ(1, 'John', 'Smith', sysdate));
 /
 
 select e.first_name, e.last_name, e.hire_date
@@ -60,7 +60,7 @@ from objtable_person e;
 /
 
 --object column
-insert into table_person values (1, person_typ('John', 'Smith', sysdate));
+insert into table_person values (1, person_typ(1, 'John', 'Smith', sysdate));
 /
 
 select *
@@ -94,7 +94,31 @@ from table_pet tp;
 /
 ```
 
-//todo: mention about `scope is`
+You can optionally define a scope of your object references when declaring them. Scoped references don't require as much storage space, resulting in more efficient queries and as an added bonus, it becomes quite clear which table your object reference is relating to. The scope is set up with the `scope is` clause immediately after the object type, in the declaration.
+
+```sql
+create table table_pet2(
+    pet_name varchar2(50),
+    pet_owner ref person_typ scope is objtable_person
+);
+/
+
+insert into table_pet
+
+select 'Spot', ref(p)
+from objtable_person p
+where first_name = 'John'
+and last_name = 'Smith'
+;
+/
+
+select
+    tp.pet_name,
+    deref(tp.pet_owner).first_name owner_first,
+    tp.pet_owner.last_name owner_last--implicit dereferencing
+from table_pet2 tp;
+/
+```
 
 One downside here, is that there is nothing to stop the referenced object being removed. When this happens, the reference is known to be `dangling`. Your query can ensure the reference is not dangling with the `is not dangling` clause (or `is dangling` for the inverse check).
 
