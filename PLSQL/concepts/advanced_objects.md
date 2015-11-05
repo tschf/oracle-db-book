@@ -170,7 +170,7 @@ They can be classed into:
 
 * Member functions/procedures
 * Static functions/procedures
-* Consutors
+* Constructors
 
 ## Member functions/procudures
 
