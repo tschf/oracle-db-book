@@ -34,6 +34,19 @@ You can create a primary key on an object table by referencing an object's attri
 create table objtable_person2 of person_typ (id primary key);
 /
 ```
+
+Each object table has an object-identifier (OID). This can either be a system generated one (by default), or one that you specify as pointing to the tables primary key. In deciding if to use the system generated OID vs a primary key OID, the documentation states:
+
+> Primary-key based identifiers make it faster and easier to load data into an object table. By contrast, system-generated object identifiers need to be remapped using some user-specified keys, especially when references to them are also stored. If you use system-generated OIDs for an object table, Oracle maintains an index on the column that stores these OIDs. A system-generated OID requires extra storage space for this index and an extra 16 bytes of storage for each row object.
+
+> However, if each primary key value requires more than 16 bytes of storage and you have a large number of REFs, using the primary key might require more space than system-generated OIDs because each REF is the size of the primary key.
+
+```sql
+create table objtable_person3 of person_typ (id primary key)
+object identifier is primary key;
+/
+```
+
 And, in the case of having an object column, you can add constraints as you would usually expect - using dot notation for the column name and object attribute.
 
 ```sql
@@ -132,7 +145,41 @@ where pet_owner is not dangling;
 /
 ```
 
-But, the better approach would be to enforce some referential integrity to prevent references from dangling in the first place.
+But, the better approach would be to enforce some referential integrity to prevent references from dangling in the first place. There is nothing really new here, foreign keys can be added using the alter table statement as you would expect with any other table:
+
+```sql
+create type pet_typ as object (
+    id number,
+    name varchar2(50),
+    type varchar2(50),
+    owner_id number
+);
+/
+
+create table objtable_person of person_typ (id primary key)
+object identifier is primary key;
+/
+
+create table objtable_pet of pet_typ (id primary key)
+object identifier is primary key;
+/
+
+alter table objtable_pet
+add constraint "PERSON_PET_FK" FOREIGN KEY ("OWNER_ID") REFERENCES "OBJTABLE_PERSON"("ID");
+/
+
+insert into objtable_person values (person_Typ(1, 'John', 'Smith', NULL));
+insert into objtable_pet values (pet_typ(1, 'Spot', 'Dog', 1));
+```
+
+An alternate syntax is to embed it all in the create table statement, similar to:
+
+```sql
+create table objtable_pet2 of pet_typ (
+primary key(id),
+foreign key (owner_id) references objtable_person
+)
+```
 
 From the context of PL/SQL, before an object is initialised, it is known to `atomically NULL`. That is the object as a whole is NULL. Each of it's attributes will also be NULL (and can be tested) before being initialised. In the reverse, if you initialise the object with all fields as NULL - memory has been allocated, so the object is no longer NULL.
 
