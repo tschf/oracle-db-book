@@ -397,7 +397,7 @@ end;
 If you wish to override a function/procedure in a subtype (having a function/procedure with the same signature as its parent), you need to prefix the function/procedure with the `overriding`clause. In the subtype, if you wish to call a parents function, you need to cast self as the parent type (which is valid, since it inherits), then call the function/procedure.
 
 ```plsql
-create or replace type person_typ is object (
+create or replace type person_typ4 is object (
     id NUMBER,
     first_name varchar2(20),
     last_name varchar2(25),
@@ -406,7 +406,7 @@ create or replace type person_typ is object (
 ) NOT FINAL;
 /
 
-create or replace type body person_typ as
+create or replace type body person_typ4 as
 
     member procedure print_info
     as
@@ -417,7 +417,7 @@ create or replace type body person_typ as
 end;
 /
 
-create or replace type developer_typ under person_typ  (
+create or replace type developer_typ under person_typ4  (
     programming_language varchar2(50),
     overriding member procedure print_info
 );
