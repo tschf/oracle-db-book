@@ -500,7 +500,7 @@ ID   FIRST_NAME  LAST_NAME  HIRE_DATE  PERSON_INFO
 You may like to make your types or functions abstract, that is making them so they cannot be instantiated. To do so, you can specify `NOT INSTANTIABLE` then only subclasses that inherit will be able to be initialised in your programs..
 
 ```plsql
-create or replace type person_typ is object (
+create or replace type person_typ6 is object (
     id NUMBER,
     first_name varchar2(20),
     last_name varchar2(25),
@@ -511,7 +511,7 @@ NOT INSTANTIABLE
 NOT FINAL;
 /
 
-create or replace type body person_typ
+create or replace type body person_typ6
 as
 
     member function get_info return varchar2
@@ -523,17 +523,17 @@ as
 end;
 /
 
-create or replace type developer_typ under person_typ(
+create or replace type developer_typ4 under person_typ6(
     programming_language varchar2(50)
 );
 /
 
 declare
-    l_pers person_typ;
+    l_pers person_typ6;
 
 begin
 
-    l_pers := person_typ(1, 'John', 'Smith', NULL);
+    l_pers := person_typ6(1, 'John', 'Smith', NULL);
     dbms_output.put_line(l_pers.get_info());--never get here
     /*
     ORA-06550: line 6, column 15:
@@ -549,10 +549,10 @@ end;
 /
 
 declare
-    l_pers developer_typ;
+    l_pers developer_typ4;
 begin
 
-    l_pers := developer_typ(1, 'John', 'Smith', NULL, 'PL/SQL');
+    l_pers := developer_typ4(1, 'John', 'Smith', NULL, 'PL/SQL');
     dbms_output.put_line(l_pers.get_info());--John
 
 end;
