@@ -439,7 +439,7 @@ end;
 The neat thing with this type inheritance is that you can create an object table referring to the parent and any subtypes are able to be stored in the table. Although, just querying the table you would only get the attributes from the parent type.
 
 ```plsql
-create or replace type person_typ is object (
+create or replace type person_typ5 is object (
     id NUMBER,
     first_name varchar2(20),
     last_name varchar2(25),
@@ -448,7 +448,7 @@ create or replace type person_typ is object (
 ) NOT FINAL;
 /
 
-create or replace type body person_typ as
+create or replace type body person_typ5 as
 
     member function get_info return varchar
     as
@@ -459,33 +459,33 @@ create or replace type body person_typ as
 end;
 /
 
-create or replace type developer_typ under person_typ  (
+create or replace type developer_typ3 under person_typ5  (
     programming_language varchar2(50),
     overriding member function get_info return varchar
 );
 /
 
-create or replace type body developer_typ as
+create or replace type body developer_typ3 as
 
     overriding member function get_info return varchar
     as
     begin
-        return (self as person_typ).get_info() || ' --Language: ' || self.programming_language;
+        return (self as person_typ5).get_info() || ' --Language: ' || self.programming_language;
     end get_info;
 
 end;
 /
 --
 
-create table objtable_people of person_Typ;
+create table objtable_people4 of person_Typ5;
 /
 
-insert into objtable_people values (person_typ(1, 'John', 'Smith', NULL));
-insert into objtable_people values (developer_typ(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
+insert into objtable_people4 values (person_typ5(1, 'John', 'Smith', NULL));
+insert into objtable_people4 values (developer_typ3(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
 /
 
 select otp.*, otp.get_info() person_info
-from objtable_people otp;
+from objtable_people4 otp;
 /
 
 
