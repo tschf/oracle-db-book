@@ -377,7 +377,7 @@ create or replace type developer_typ under person_typ3  (
 /
 
 --can only add new fields to person_typ with the alter type statement
-alter type person_typ add attribute termination_date DATE cascade;
+alter type person_typ3 add attribute termination_date DATE cascade;
 /
 ```
 
@@ -385,7 +385,7 @@ With this, our new `developer_typ` object automatically contain all the fields c
 
 ```plsql
 declare
-    l_dev developer_typ;
+    l_dev developer_typ3;
 begin
     --developer_typ(ID, FIRST_NAME, LAST_NAME, HIRE_DATE, TERMINATION_DATE, PROGRAMMING_LANGUAGE)
     l_dev := developer_typ(1, 'John', 'Smith', NULL, NULL, 'Java');
