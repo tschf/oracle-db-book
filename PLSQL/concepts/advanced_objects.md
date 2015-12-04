@@ -417,13 +417,13 @@ create or replace type body person_typ4 as
 end;
 /
 
-create or replace type developer_typ under person_typ4  (
+create or replace type developer_typ2 under person_typ4  (
     programming_language varchar2(50),
     overriding member procedure print_info
 );
 /
 
-create or replace type body developer_typ as
+create or replace type body developer_typ2 as
 
     overriding member procedure print_info
     as
