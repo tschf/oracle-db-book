@@ -81,7 +81,7 @@ from table_person e;--table must be aliased to refer to columns in the object ty
 /
 ```
 
-Observing the object table version, you may think how can we relate object tables to one another. Object rows have a `ref` which points to the row. We can declare a `ref` pointer to a particular object by using that keyword before the particular object type; and then use the `ref` function to retrieve the appropriate ref. When querying the table, to access the referenced column values, we would need to `deref`erence the object, to be able to access the fields.
+Observing the object table version, you may think, how can we relate object tables to one another. Object rows have a `ref` which points to the row. We can declare a `ref` pointer to a particular object by using that keyword before the particular object type; and then use the `ref` function to retrieve the appropriate ref. When querying the table, to access the referenced column values, we would need to `deref`erence the object, to be able to access the fields.
 
 ```sql
 create table table_pet(
