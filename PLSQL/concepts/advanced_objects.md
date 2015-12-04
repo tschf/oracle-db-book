@@ -363,7 +363,7 @@ alter type house_typ NOT FINAL;
 Once an object has dependents, it will not be possible to compile the type specification anymore, as it is relied on by other objects. You can however issue alter statements (with the `cascade` or `invalidate` options) to the type to add new fields. note: This rule doesn't apply to type bodies - they can be recompiled without issue.
 
 ```plsql
-create or replace type person_typ is object (
+create or replace type person_typ3 is object (
     id NUMBER,
     first_name varchar2(20),
     last_name varchar2(25),
@@ -371,7 +371,7 @@ create or replace type person_typ is object (
 ) NOT FINAL;
 /
 
-create or replace type developer_typ under person_typ  (
+create or replace type developer_typ under person_typ3  (
     programming_language varchar2(50)
 );
 /
