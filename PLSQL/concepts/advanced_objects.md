@@ -177,7 +177,7 @@ An alternate syntax is to embed it all in the create table statement, similar to
 ```sql
 create table objtable_pet2 of pet_typ (
 primary key(id),
-foreign key (owner_id) references objtable_person
+foreign key (owner_id) references objtable_person4
 )
 ```
 
