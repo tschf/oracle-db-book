@@ -477,15 +477,15 @@ end;
 /
 --
 
-create table objtable_people4 of person_Typ5;
+create table objtable_person4 of person_Typ5;
 /
 
-insert into objtable_people4 values (person_typ5(1, 'John', 'Smith', NULL));
-insert into objtable_people4 values (developer_typ3(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
+insert into objtable_person4 values (person_typ5(1, 'John', 'Smith', NULL));
+insert into objtable_person4 values (developer_typ3(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
 /
 
 select otp.*, otp.get_info() person_info
-from objtable_people4 otp;
+from objtable_person4 otp;
 /
 
 
@@ -605,11 +605,11 @@ create or replace type developer_typ5 under person_typ8  (
 );
 /
 
-create table objtable_people5 of person_Typ8;
+create table objtable_person5 of person_Typ8;
 /
 
-insert into objtable_people5 values (person_typ8(1, 'John', 'Smith', NULL));
-insert into objtable_people5 values (developer_typ5(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
+insert into objtable_person5 values (person_typ8(1, 'John', 'Smith', NULL));
+insert into objtable_person5 values (developer_typ5(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
 /
 
 select
@@ -622,7 +622,7 @@ select
             then 'Person'
 
     end type_kind
-from objtable_people5 otp
+from objtable_person5 otp
 
 /* Output:
 
@@ -649,11 +649,11 @@ create or replace type developer_typ6 under person_typ9  (
 );
 /
 
-create table objtable_people6 of person_Typ9;
+create table objtable_person6 of person_Typ9;
 /
 
-insert into objtable_people6 values (person_typ9(1, 'John', 'Smith', NULL));
-insert into objtable_people6 values (developer_typ6(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
+insert into objtable_person6 values (person_typ9(1, 'John', 'Smith', NULL));
+insert into objtable_person6 values (developer_typ6(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
 /
 
 declare
@@ -669,7 +669,7 @@ begin
 
     select value(otp)
     bulk collect into l_all_people
-    from objtable_people6 otp;
+    from objtable_person6 otp;
 
     for i in 1..l_all_people.COUNT
     loop
@@ -712,4 +712,38 @@ begin
 
 end;
 /
+```
+
+Cleanup
+
+```plsql
+drop table objtable_pet2;
+drop table objtable_pet;
+drop table table_pet2;
+drop table table_pet;
+drop table objtable_person6;
+drop table objtable_person5;
+drop table objtable_person4;
+drop table objtable_person3;
+drop table objtable_person2;
+drop table objtable_person;
+drop table table_person2;
+drop table table_person;
+drop type pet_typ;
+drop type developer_typ6;
+drop type developer_typ5;
+drop type developer_typ4;
+drop type developer_typ3;
+drop type developer_typ2;
+drop type developer_typ;
+drop type person_typ9;
+drop type person_typ8;
+drop type person_typ7;
+drop type person_typ6;
+drop type person_typ5;
+drop type person_typ4;
+drop type person_typ3;
+drop type person_typ2;
+drop type person_typ;
+drop type house_typ;
 ```
