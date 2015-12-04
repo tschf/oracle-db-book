@@ -356,7 +356,7 @@ create or replace type house_typ is object (
 ) NOT FINAL;
 /
 --or
-alter type house_type NOT FINAL;
+alter type house_typ NOT FINAL;
 /
 ```
 
