@@ -156,7 +156,7 @@ create type pet_typ as object (
 );
 /
 
-create table objtable_person of person_typ (id primary key)
+create table objtable_person4 of person_typ (id primary key)
 object identifier is primary key;
 /
 
@@ -165,10 +165,10 @@ object identifier is primary key;
 /
 
 alter table objtable_pet
-add constraint "PERSON_PET_FK" FOREIGN KEY ("OWNER_ID") REFERENCES "OBJTABLE_PERSON"("ID");
+add constraint "PERSON_PET_FK" FOREIGN KEY ("OWNER_ID") REFERENCES "OBJTABLE_PERSON4"("ID");
 /
 
-insert into objtable_person values (person_Typ(1, 'John', 'Smith', NULL));
+insert into objtable_person4 values (person_Typ(1, 'John', 'Smith', NULL));
 insert into objtable_pet values (pet_typ(1, 'Spot', 'Dog', 1));
 ```
 
