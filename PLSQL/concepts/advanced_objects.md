@@ -428,7 +428,7 @@ create or replace type body developer_typ2 as
     overriding member procedure print_info
     as
     begin
-        (self as person_typ).print_info();
+        (self as person_typ4).print_info();
         dbms_output.put_line(self.programming_language);
     end print_info;
 
