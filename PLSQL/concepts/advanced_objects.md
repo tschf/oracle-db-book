@@ -76,8 +76,8 @@ from objtable_person e;
 insert into table_person values (1, person_typ(1, 'John', 'Smith', sysdate));
 /
 
-select *
-from table_person;
+select e.person.first_name, e.person.last_name, e.person.hire_date
+from table_person e;--table must be aliased to refer to columns in the object type
 /
 ```
 
