@@ -116,7 +116,7 @@ create table table_pet2(
 );
 /
 
-insert into table_pet
+insert into table_pet2
 
 select 'Spot', ref(p)
 from objtable_person p
