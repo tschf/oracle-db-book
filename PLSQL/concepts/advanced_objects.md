@@ -562,7 +562,7 @@ end;
 In the case of applying `NOT INSTANTIABLE` to a method, this serves as as a mechanism to declare a method specification, without implementing it in the type body (your subtypes would each have their own implementation). If you declare a method in the type specification, you would usually have to add an implementation.
 
 ```plsql
-create or replace type person_typ is object (
+create or replace type person_typ7 is object (
     id NUMBER,
     first_name varchar2(20),
     last_name varchar2(25),
@@ -574,7 +574,7 @@ NOT INSTANTIABLE
 NOT FINAL;
 /
 
-create or replace type body person_typ
+create or replace type body person_typ7
 as
 
     member function get_id return NUMBER
