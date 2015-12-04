@@ -203,7 +203,7 @@ begin
 
     test_null(l_person);--NULL
 
-    l_person := person_typ(NULL,NULL,NULL);
+    l_person := person_typ(NULL,NULL,NULL,NULL);
     test_null(l_person);--Not NULL
 
 
