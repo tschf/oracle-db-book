@@ -385,7 +385,7 @@ With this, our new `developer_typ` object automatically contain all the fields c
 
 ```plsql
 declare
-    l_dev developer_typ3;
+    l_dev developer_typ;
 begin
     --developer_typ(ID, FIRST_NAME, LAST_NAME, HIRE_DATE, TERMINATION_DATE, PROGRAMMING_LANGUAGE)
     l_dev := developer_typ(1, 'John', 'Smith', NULL, NULL, 'Java');
