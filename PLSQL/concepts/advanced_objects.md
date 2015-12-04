@@ -636,7 +636,7 @@ ID  LAST_NAME   TYPE_KIND
 We can also use what we've learnt here for use in our PL/SQL code, with the addition of the `treat` function in order to cast what is stored into sub-types.
 
 ```plsql
-create or replace type person_typ is object (
+create or replace type person_typ9 is object (
     id NUMBER,
     first_name varchar2(20),
     last_name varchar2(25),
@@ -644,54 +644,54 @@ create or replace type person_typ is object (
 ) NOT FINAL;
 /
 
-create or replace type developer_typ under person_typ  (
+create or replace type developer_typ6 under person_typ9  (
     programming_language varchar2(50)
 );
 /
 
-create table objtable_people of person_Typ;
+create table objtable_people6 of person_Typ9;
 /
 
-insert into objtable_people values (person_typ(1, 'John', 'Smith', NULL));
-insert into objtable_people values (developer_typ(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
+insert into objtable_people6 values (person_typ9(1, 'John', 'Smith', NULL));
+insert into objtable_people6 values (developer_typ6(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
 /
 
 declare
 
-    type t_person_list is table of person_typ
+    type t_person_list is table of person_typ9
         index by PLS_INTEGER;
     l_all_people t_person_list;    
 
-    l_person person_typ;
-    l_developer developer_typ;
+    l_person person_typ9;
+    l_developer developer_typ6;
 
 begin
 
     select value(otp)
     bulk collect into l_all_people
-    from objtable_people otp;
+    from objtable_people6 otp;
 
     for i in 1..l_all_people.COUNT
     loop
 
         dbms_output.put_line('Row ' || i);
 
-        if l_all_people(i) is of (developer_typ)
+        if l_all_people(i) is of (developer_typ6)
         then
             dbms_output.put_line('Developer');
-            l_developer := treat(l_all_people(i) as developer_typ);
+            l_developer := treat(l_all_people(i) as developer_typ6);
 
             dbms_output.put_line('First name: ' || l_developer.first_name);
             dbms_output.put_line('Last name: ' || l_developer.last_name);
             dbms_output.put_line('Programming Language: ' || l_developer.programming_language);
-        elsif l_all_people(i) is of (person_typ)
+        elsif l_all_people(i) is of (person_typ9)
         then
             dbms_output.put_line('Person');
-            l_person := treat(l_all_people(i) as person_typ);
+            l_person := treat(l_all_people(i) as person_typ9);
             dbms_output.put_line('First name: ' || l_person.first_name);
             dbms_output.put_line('Last name: ' || l_person.last_name);
         else
-            dbms_output.put_line('Uknown type');
+            dbms_output.put_line('Unknown type');
         end if;
 
     end loop;
