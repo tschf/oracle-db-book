@@ -592,37 +592,37 @@ You may also wish to restrict that a method can't be overridden in a future subt
 The final thing you will likely want to be able to do is test the type of an object. The predicate `is of type` will be useful here. In th example, I am outputing a string depending on the type - following this, you will want to start with a bottom-up approach, since if you do a top-down approach all cases will match the first test, since all developers are people.
 
 ```sql
-create or replace type person_typ is object (
+create or replace type person_typ8 is object (
     id NUMBER,
     first_name varchar2(20),
     last_name varchar2(25),
-    hire_date DATE,
+    hire_date DATE
 ) NOT FINAL;
 /
 
-create or replace type developer_typ under person_typ  (
+create or replace type developer_typ5 under person_typ8  (
     programming_language varchar2(50)
 );
 /
 
-create table objtable_people of person_Typ;
+create table objtable_people5 of person_Typ8;
 /
 
-insert into objtable_people values (person_typ(1, 'John', 'Smith', NULL));
-insert into objtable_people values (developer_typ(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
+insert into objtable_people5 values (person_typ8(1, 'John', 'Smith', NULL));
+insert into objtable_people5 values (developer_typ5(2, 'Mark', 'Henderson', NULL, 'PL/SQL'));
 /
 
 select
     otp.id
   , otp.last_name
   , case
-        when value(otp) is of (developer_typ)
+        when value(otp) is of (developer_typ5)
             then 'Developer'
-        when value(otp) is of (hr.person_typ)
+        when value(otp) is of (person_typ8)
             then 'Person'
 
     end type_kind
-from objtable_people otp
+from objtable_people5 otp
 
 /* Output:
 
