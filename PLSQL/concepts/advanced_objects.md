@@ -61,7 +61,7 @@ add constraint "TABLE_PERSON2_UK1" UNIQUE (person.first_name, person.last_name);
 /
 ```
 
-Both object tables and objects as a column support regular insertion and querying by constructing the object type. When querying the object table can just reference individual fields as if they were regular columns.
+Both object tables and objects as a column support regular insertion and querying by constructing the object type. When querying, the object table can just reference individual fields as if they were regular columns.
 
 ```sql
 --object table
