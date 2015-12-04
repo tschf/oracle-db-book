@@ -219,7 +219,7 @@ They can be classed into:
 * Static functions/procedures
 * Constructors
 
-## Member functions/procudures
+## Member functions/procedures
 
 These have access to the instance attributes. They can be accessed through the `SELF` field. In the specification, you declare it with `member function func_name return type`. SELF is always available without the need to declare it - although, you can optionally pass it in, in the parameter list `SELF in out nocopy person_typ2`.
 
