@@ -304,7 +304,7 @@ end;
 
 ## Constructors
 
-By default, an object has an implicit constructor, which expects a value for each defined field. The previous examples have demonstrated this with `person_typ(NULL,NULL,NULL)` - setting a NULL value for each field. Suppose however, that you want to support instantiation of your object without passing in the hire date (e.g. just passing in the first name and last name).
+By default, an object has an implicit constructor, which expects a value for each defined field. The previous examples have demonstrated this with `person_typ(NULL,NULL,NULL,NULL)` - setting a NULL value for each field. Suppose however, that you want to support instantiation of your object without passing in the hire date (e.g. just passing in the first name and last name).
 
 The function is declared with the clause `constructor function type_name(param_list) return self as result`. Then, at the end of the function, you issue a `return` statement. When instantiating the object, you can opt to use the `new` keyword, though this is not necessary.
 
