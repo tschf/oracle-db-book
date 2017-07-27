@@ -1,4 +1,4 @@
-#MERGE
+# MERGE
 
 The `merge` statement is useful to upsert data - that is, update data when there is a matching record, or otherwise insert a new row.
 
